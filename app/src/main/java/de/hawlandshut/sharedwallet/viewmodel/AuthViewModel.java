@@ -37,4 +37,8 @@ public class AuthViewModel extends AndroidViewModel {
         return createAccountLiveData;
     }
 
+    public void signOut(){
+        authRepository.signOut();
+    }
+
 }
