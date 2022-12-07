@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">sharedWallet</string>
+    <string name="loading">Loading...</string>
 </resources>

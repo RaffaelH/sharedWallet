@@ -21,7 +21,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     private TextView mTextViewError;
     private EditText mEditTextEmail;
     private EditText mEditTextPassword;
+    private LoadingDialog mLoadingDialog;
     private AuthViewModel mAuthViewModel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         mEditTextEmail = findViewById(R.id.et_sign_in_email);
         mEditTextPassword = findViewById(R.id.et_sign_in_password);
 
+        mLoadingDialog = new LoadingDialog(this);
         mButtonSignIn.setOnClickListener(this);
         mButtonCreateAccount.setOnClickListener(this);
         mButtonForgotPassword.setOnClickListener(this);
@@ -73,9 +76,11 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     private void signIn(){
         String email = mEditTextEmail.getText().toString();
         String password = mEditTextPassword.getText().toString();
+        mLoadingDialog.showDialog();
 
         mAuthViewModel.signIn(email,
                 password).observe(this, signInResource -> {
+                    mLoadingDialog.closeDialog();
             switch(signInResource.status){
                 case SUCCESS:
                     Toast.makeText(getApplicationContext(), "You are signed in.", Toast.LENGTH_LONG).show();

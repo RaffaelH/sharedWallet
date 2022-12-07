@@ -1,15 +1,13 @@
 package de.hawlandshut.sharedwallet.viewmodel;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-
-import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseUser;
 
 import de.hawlandshut.sharedwallet.model.entity.Resource;
-import de.hawlandshut.sharedwallet.model.entity.User;
 import de.hawlandshut.sharedwallet.repository.AuthRepository;
 
 public class AuthViewModel extends AndroidViewModel {
@@ -34,6 +32,7 @@ public class AuthViewModel extends AndroidViewModel {
     }
 
     public LiveData<Resource<String>> createAccount(String email, String password) {
+        Log.d("Auth","createAccount - ViewModel");
         createAccountLiveData = authRepository.createAccount(email, password);
         return createAccountLiveData;
     }
