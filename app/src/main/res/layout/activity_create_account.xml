@@ -19,6 +19,14 @@ tools:context=".views.CreateAccountActivity">
     android:inputType="textEmailAddress" />
 
 <EditText
+    android:id="@+id/et_create_account_display_name"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:hint="Display Name"
+    android:ems="10"
+    android:inputType="text" />
+
+<EditText
     android:id="@+id/et_create_account_password"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -33,6 +41,8 @@ tools:context=".views.CreateAccountActivity">
     android:ems="10"
     android:hint="Passwort (repeat)"
     android:inputType="textPassword" />
+
+
 
 <Button
     android:id="@+id/btn_create_account"

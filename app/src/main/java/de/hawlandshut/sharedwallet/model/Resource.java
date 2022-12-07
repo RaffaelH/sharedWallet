@@ -1,4 +1,4 @@
-package de.hawlandshut.sharedwallet.model.entity;
+package de.hawlandshut.sharedwallet.model;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

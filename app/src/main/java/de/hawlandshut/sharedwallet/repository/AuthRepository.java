@@ -4,10 +4,12 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import de.hawlandshut.sharedwallet.model.entity.Resource;
+import com.google.firebase.auth.UserProfileChangeRequest;
+
+import de.hawlandshut.sharedwallet.model.Resource;
 
 public class AuthRepository {
-    private final String TAG = "AuthRepository: ";
+    private final String TAG = "AuthRepository";
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
     public MutableLiveData<Resource<String>> signIn(String email, String password) {
@@ -29,12 +31,18 @@ public class AuthRepository {
         return firebaseUserLiveData;
     }
 
-    public MutableLiveData<Resource<String>> createAccount(String email, String password){
+    public MutableLiveData<Resource<String>> createAccount(String email, String password, String displayName){
         Log.d("Auth","createAccount - Repository");
         MutableLiveData<Resource<String>> createAccountMutableLiveData = new MutableLiveData<>();
         firebaseAuth.createUserWithEmailAndPassword(email,password)
             .addOnSuccessListener(authTask -> {
-                createAccountMutableLiveData.setValue(Resource.success("success"));
+                //set display name
+                firebaseAuth.getCurrentUser().updateProfile(new UserProfileChangeRequest.Builder()
+                        .setDisplayName(displayName).build()).addOnSuccessListener(update -> {
+                    createAccountMutableLiveData.setValue(Resource.success("success"));
+                }).addOnFailureListener(failure ->{
+                    createAccountMutableLiveData.setValue(Resource.error(failure.getMessage(),null));
+                });
             }).addOnFailureListener(authFailure ->{
             Log.d("Auth",authFailure.getMessage());
             createAccountMutableLiveData.setValue(Resource.error(authFailure.getMessage(),null));

@@ -27,6 +27,7 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
     private EditText mEditTextEmail;
     private EditText mEditTextPassword;
     private EditText mEditTextPasswordRep;
+    private EditText mEditTextDisplayName;
     private Button mButtonCreateAccount;
     private TextView mTextViewCreateAccount;
     private AuthViewModel mAuthViewModel;
@@ -40,6 +41,7 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
         mEditTextEmail = findViewById( R.id.et_create_account_email );
         mEditTextPassword = findViewById( R.id.et_create_account_password );
         mEditTextPasswordRep = findViewById( R.id.et_create_account_password_rep );
+        mEditTextDisplayName = findViewById(R.id.et_create_account_display_name);
         mButtonCreateAccount = findViewById( R.id.btn_create_account );
         mTextViewCreateAccount = findViewById(R.id.tv_create_account_error);
 
@@ -65,19 +67,20 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
         mLoadingDialog.showDialog();
         String email = mEditTextEmail.getText().toString();
         String password = mEditTextPassword.getText().toString();
-        String password1 = mEditTextPasswordRep.getText().toString();
+        String passwordRep = mEditTextPasswordRep.getText().toString();
+        String displayName = mEditTextDisplayName.getText().toString();
 
-        if (password.length()<2 || password1.length() < 2 ){
+        if (password.length()<2 || passwordRep.length() < 2 ){
             Toast.makeText(getApplicationContext(), "Password to short", Toast.LENGTH_LONG).show();
             return;
         }
 
-        if (!password1.equals(password)){
+        if (!passwordRep.equals(password)){
             Toast.makeText(getApplicationContext(), "Passwords do not match", Toast.LENGTH_LONG).show();
             return;
         }
 
-        mAuthViewModel.createAccount(email,password).observe(this,createAccountResource -> {
+        mAuthViewModel.createAccount(email,password, displayName).observe(this,createAccountResource -> {
 
             mLoadingDialog.closeDialog();
             switch(createAccountResource.status){
@@ -91,44 +94,5 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
                     return;
             }
         });
-    }
-
-    private void createAccount(){
-        Toast.makeText(getApplication(), "pressed createAccount", Toast.LENGTH_LONG).show();
-        mLoadingDialog.showDialog();
-        String email = mEditTextEmail.getText().toString();
-        String password = mEditTextPassword.getText().toString();
-        String password1 = mEditTextPasswordRep.getText().toString();
-
-        if (password.length()<2 || password1.length() < 2 ){
-            Toast.makeText(getApplicationContext(), "Password to short", Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        if (!password1.equals(password)){
-            Toast.makeText(getApplicationContext(), "Passwords do not match", Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        mLoadingDialog.closeDialog();
-                        if (task.isSuccessful()) {
-                            Toast.makeText(getApplicationContext(), "User created.", Toast.LENGTH_LONG).show();
-                            finish();
-                        } else {
-                            Toast.makeText(getApplicationContext(), "User creation failed.", Toast.LENGTH_LONG).show();
-                            Log.e("CreateAccount", "Error in user creation : " + task.getException().getMessage());
-                        }
-                    }
-                });
-        }
-
-
-    private void openLoadingDialog()
-    {
-
     }
 }
