@@ -1,4 +1,4 @@
-package de.hawlandshut.sharedwallet.views;
+package de.hawlandshut.sharedwallet.views.components;
 
 import static android.graphics.Color.TRANSPARENT;
 

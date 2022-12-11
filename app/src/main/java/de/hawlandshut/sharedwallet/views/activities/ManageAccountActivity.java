@@ -1,4 +1,4 @@
-package de.hawlandshut.sharedwallet.views;
+package de.hawlandshut.sharedwallet.views.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 

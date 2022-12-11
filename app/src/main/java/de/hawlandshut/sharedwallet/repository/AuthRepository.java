@@ -24,6 +24,7 @@ public class AuthRepository {
         });
         return authenticationMutableLiveData;
     }
+
     public MutableLiveData<FirebaseUser> getCurrentFirebaseUser(){
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         MutableLiveData<FirebaseUser> firebaseUserLiveData= new MutableLiveData<>();

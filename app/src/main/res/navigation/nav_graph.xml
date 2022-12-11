@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/nav_group">
+
+    <fragment
+        android:id="@+id/nav_account"
+        android:name="de.hawlandshut.sharedwallet.views.fragments.AccountFragment"
+        android:label="fragment_account"
+        tools:layout="@layout/fragment_account" />
+    <fragment
+        android:id="@+id/nav_friends"
+        android:name="de.hawlandshut.sharedwallet.views.fragments.FriendsFragment"
+        android:label="fragment_firends"
+        tools:layout="@layout/fragment_firends" />
+    <fragment
+        android:id="@+id/nav_group"
+        android:name="de.hawlandshut.sharedwallet.views.fragments.GroupsFragment"
+        android:label="fragment_groups"
+        tools:layout="@layout/fragment_groups" />
+</navigation>
