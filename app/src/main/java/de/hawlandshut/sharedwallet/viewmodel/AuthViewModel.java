@@ -32,7 +32,6 @@ public class AuthViewModel extends AndroidViewModel {
     }
 
     public LiveData<Resource<String>> createAccount(String email, String password, String displayName) {
-        Log.d("Auth","createAccount - ViewModel");
         createAccountLiveData = authRepository.createAccount(email, password, displayName);
         return createAccountLiveData;
     }

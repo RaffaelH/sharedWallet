@@ -1,7 +1,6 @@
 package de.hawlandshut.sharedwallet.views.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -14,9 +13,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import de.hawlandshut.sharedwallet.R;
 import de.hawlandshut.sharedwallet.viewmodel.AuthViewModel;
-import de.hawlandshut.sharedwallet.views.fragments.AccountFragment;
-import de.hawlandshut.sharedwallet.views.fragments.FriendsFragment;
-import de.hawlandshut.sharedwallet.views.fragments.GroupsFragment;
+
+
 
 public class MainActivity extends AppCompatActivity {
 
