@@ -11,11 +11,6 @@ import android.view.ViewGroup;
 
 import de.hawlandshut.sharedwallet.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link FriendsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class FriendsFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match

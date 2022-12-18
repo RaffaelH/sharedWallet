@@ -1,61 +1,68 @@
 package de.hawlandshut.sharedwallet.views.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+
 import de.hawlandshut.sharedwallet.R;
+import de.hawlandshut.sharedwallet.viewmodel.AuthViewModel;
+import de.hawlandshut.sharedwallet.viewmodel.GroupViewModel;
+import de.hawlandshut.sharedwallet.views.activities.CreateGroupActivity;
+import de.hawlandshut.sharedwallet.views.components.GroupListAdapter;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link GroupsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class GroupsFragment extends Fragment {
+public class GroupsFragment extends Fragment implements View.OnClickListener{
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
     private static final String TAG = "GroupsFragment";
+    private ExtendedFloatingActionButton mFltBtnNewGroup;
+    private GroupViewModel mGroupViewModel;
+    private AuthViewModel mAuthViewModel;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     public GroupsFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment GroupsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static GroupsFragment newInstance(String param1, String param2) {
-        GroupsFragment fragment = new GroupsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        mFltBtnNewGroup = getView().findViewById(R.id.flt_btn_new_group);
+        mFltBtnNewGroup.setOnClickListener(this);
+
+
+        RecyclerView recyclerView = getView().findViewById(R.id.rv_group_list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        recyclerView.setHasFixedSize(true);
+
+        GroupListAdapter adapter = new GroupListAdapter();
+        recyclerView.setAdapter(adapter);
+        mAuthViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
+        mGroupViewModel = new ViewModelProvider(requireActivity()).get(GroupViewModel.class);
+        mGroupViewModel.getAllGroups().observe(this.getActivity(),obs ->{
+            switch(obs.status){
+                case SUCCESS:
+                    adapter.setGroups(obs.data);
+                    break;
+                case ERROR:
+                    Log.d(TAG,obs.message);
+                    break;
+            }
+        });
     }
 
     @Override
@@ -64,4 +71,15 @@ public class GroupsFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_groups, container, false);
     }
+
+    @Override
+    public void onClick(View view) {
+        switch(view.getId()){
+            case R.id.flt_btn_new_group:
+                Intent intent = new Intent(getActivity(), CreateGroupActivity.class);
+                startActivity(intent);
+                return;
+        }
+    }
+
 }

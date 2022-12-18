@@ -13,18 +13,20 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import de.hawlandshut.sharedwallet.R;
 import de.hawlandshut.sharedwallet.viewmodel.AuthViewModel;
-
+import de.hawlandshut.sharedwallet.viewmodel.GroupViewModel;
 
 
 public class MainActivity extends AppCompatActivity {
 
     private AuthViewModel mAuthViewModel;
+    private GroupViewModel mGroupViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mAuthViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
+        mGroupViewModel = new ViewModelProvider(this).get(GroupViewModel.class);
     }
 
     @Override

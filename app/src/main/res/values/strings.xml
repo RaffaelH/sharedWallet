@@ -6,4 +6,9 @@
     <string name="text_label_3">Konto</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="extended_fab_content_desc">neue Gruppe</string>
+    <string name="extended_fab_label">Neue Gruppe</string>
+    <string name="gruppenname_eingebn">Gruppenname eingebn</string>
+    <string name="gruppenname_eingeben">Gruppenname eingeben</string>
+    <string name="sobald_du_diese_gruppe_gespeichert_hast_kannst_du_gruppenmitglieder_hinzuf_gen">Sobald du diese Gruppe gespeichert hast, kannst du Gruppenmitglieder hinzufügen</string>
 </resources>

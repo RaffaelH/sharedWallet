@@ -1,41 +1,40 @@
 package de.hawlandshut.sharedwallet.viewmodel;
 
 import android.app.Application;
-import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import com.google.firebase.auth.FirebaseUser;
 
-import de.hawlandshut.sharedwallet.model.Resource;
+import de.hawlandshut.sharedwallet.model.entities.Resource;
+import de.hawlandshut.sharedwallet.model.methods.IAuthMethods;
 import de.hawlandshut.sharedwallet.repository.AuthRepository;
 
-public class AuthViewModel extends AndroidViewModel {
+public class AuthViewModel extends AndroidViewModel implements IAuthMethods {
     private AuthRepository authRepository;
-    private LiveData<Resource<String>> authenticatedUserLiveData;
-    private LiveData<Resource<String>> createAccountLiveData;
-    private LiveData<FirebaseUser> currentFirebaseUser;
 
-    public AuthViewModel(Application application) {
+    public AuthViewModel(@NonNull Application application) {
         super(application);
         authRepository = new AuthRepository();
     }
 
+    @Override
     public LiveData<Resource<String>> signIn(String email, String password) {
-        authenticatedUserLiveData = authRepository.signIn(email, password);
-        return authenticatedUserLiveData;
+        return authRepository.signIn(email, password);
     }
 
+    @Override
     public LiveData<FirebaseUser> getCurrentFirebaseUser (){
-        currentFirebaseUser = authRepository.getCurrentFirebaseUser();
-        return currentFirebaseUser;
+        return authRepository.getCurrentFirebaseUser();
     }
 
+    @Override
     public LiveData<Resource<String>> createAccount(String email, String password, String displayName) {
-        createAccountLiveData = authRepository.createAccount(email, password, displayName);
-        return createAccountLiveData;
+        return authRepository.createAccount(email, password, displayName);
     }
 
+    @Override
     public void signOut(){
         authRepository.signOut();
     }

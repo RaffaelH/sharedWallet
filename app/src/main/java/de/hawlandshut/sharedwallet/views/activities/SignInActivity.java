@@ -2,6 +2,7 @@ package de.hawlandshut.sharedwallet.views.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStore;
 
 import android.content.Intent;
 import android.os.Bundle;

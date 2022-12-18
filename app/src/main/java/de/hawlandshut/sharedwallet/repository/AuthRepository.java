@@ -6,12 +6,22 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
-import de.hawlandshut.sharedwallet.model.Resource;
+import de.hawlandshut.sharedwallet.model.entities.Resource;
+import de.hawlandshut.sharedwallet.model.methods.IAuthMethods;
 
-public class AuthRepository {
+public class AuthRepository implements IAuthMethods {
     private final String TAG = "AuthRepository";
+    private static AuthRepository instance;
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
+    public static AuthRepository getInstance() {
+        if(instance == null) {
+            instance = new AuthRepository();
+        }
+        return instance;
+    }
+
+    @Override
     public MutableLiveData<Resource<String>> signIn(String email, String password) {
         MutableLiveData<Resource<String>> authenticationMutableLiveData = new MutableLiveData<>();
         firebaseAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(authTask ->{
@@ -25,6 +35,7 @@ public class AuthRepository {
         return authenticationMutableLiveData;
     }
 
+    @Override
     public MutableLiveData<FirebaseUser> getCurrentFirebaseUser(){
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         MutableLiveData<FirebaseUser> firebaseUserLiveData= new MutableLiveData<>();
@@ -32,6 +43,7 @@ public class AuthRepository {
         return firebaseUserLiveData;
     }
 
+    @Override
     public MutableLiveData<Resource<String>> createAccount(String email, String password, String displayName){
         Log.d("Auth","createAccount - Repository");
         MutableLiveData<Resource<String>> createAccountMutableLiveData = new MutableLiveData<>();
@@ -51,6 +63,7 @@ public class AuthRepository {
         return createAccountMutableLiveData;
     }
 
+    @Override
     public void signOut(){
         firebaseAuth.signOut();
     }

@@ -40,10 +40,8 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         mBtnSignOut = getView().findViewById(R.id.btn_account_sign_out);
         mBtnDelete = getView().findViewById(R.id.btn_account_delete_user);
         mEdtPassword = getView().findViewById(R.id.et_account_password);
-
         mBtnSignOut.setOnClickListener(this);
         mAuthViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
-
     }
 
     @Override
@@ -62,7 +60,6 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                 mAuthViewModel.signOut();
                 //restart Main Activity to trigger onStart method
                 ((MainActivity)getActivity()).restart();
-
                 return;
         }
     }

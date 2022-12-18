@@ -1,18 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:context=".views.fragments.GroupsFragment">
 
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/tv_group"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="List of Groups." />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_group_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="60dp"/>
 
-    </LinearLayout>
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/flt_btn_new_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="80dp"
+        android:layout_marginStart="190dp"
+        android:layout_marginEnd="20dp"
+        android:layout_gravity="bottom"
+        android:gravity="center_horizontal"
+        android:contentDescription="@string/extended_fab_content_desc"
+        android:text="@string/extended_fab_label"
+   />
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</LinearLayout>
