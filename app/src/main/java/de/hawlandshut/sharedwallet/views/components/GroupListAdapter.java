@@ -2,6 +2,7 @@ package de.hawlandshut.sharedwallet.views.components;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.hawlandshut.sharedwallet.R;
+import de.hawlandshut.sharedwallet.model.entities.GroupDto;
 import de.hawlandshut.sharedwallet.model.entities.GroupInfoDto;
+import de.hawlandshut.sharedwallet.viewmodel.GroupViewModel;
 import de.hawlandshut.sharedwallet.views.activities.GroupEditActivity;
 
 public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.GroupHolder> {
@@ -42,7 +45,7 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.Grou
         GroupInfoDto groupInfo = groups.get(position);
         holder.tvTitle.setText(groupInfo.getTitle());
         holder.tvMembers.setText(String.valueOf(groupInfo.getMemberNames()));
-
+        holder.groupId = groups.get(position).getGroupId();
     }
 
     @Override
@@ -59,6 +62,8 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.Grou
         private CardView cvCard;
         private TextView tvTitle;
         private TextView tvMembers;
+        private String groupId;
+        private GroupViewModel groupViewModel;
 
         public GroupHolder(View itemView){
             super(itemView);
@@ -66,12 +71,12 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.Grou
             tvMembers = itemView.findViewById(R.id.tv_members);
             cvCard = itemView.findViewById(R.id.cv_group_item);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    itemView.getContext().startActivity(new Intent(itemView.getContext(), GroupEditActivity.class));
-                }
-            });
+            itemView.setOnClickListener(view ->{
+                Log.d("GroupHolder",groupId);
+                itemView.getContext()
+                        .startActivity(new Intent(itemView.getContext(), GroupEditActivity.class)
+                                .putExtra("groupId",groupId));
+                    });
         }
 
     }

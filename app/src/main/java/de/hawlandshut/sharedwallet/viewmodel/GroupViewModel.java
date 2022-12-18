@@ -50,4 +50,5 @@ public class GroupViewModel extends AndroidViewModel implements IGroupMethods {
     public LiveData<Resource<String>> deleteGroup(String groupId) {
         return groupRepository.deleteGroup(groupId);
     }
+
 }

@@ -2,12 +2,14 @@ package de.hawlandshut.sharedwallet.views.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStore;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -23,8 +25,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.d("Main","onCreat called");
         mAuthViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
         mGroupViewModel = new ViewModelProvider(this).get(GroupViewModel.class);
     }
@@ -32,11 +36,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
         mAuthViewModel.getCurrentFirebaseUser().observe(this, currentFirebaseUser -> {
             if (currentFirebaseUser == null) {
                 Intent intent = new Intent(getApplication(), SignInActivity.class);
                 startActivity(intent);
             } else if(currentFirebaseUser != null) {
+
                 NavController navController = Navigation.findNavController(this, R.id.nav_fragment);
                 BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_view);
                 NavigationUI.setupWithNavController(bottomNavigationView, navController);

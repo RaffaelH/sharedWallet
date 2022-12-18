@@ -1,29 +1,23 @@
 package de.hawlandshut.sharedwallet.repository;
 
-import android.annotation.SuppressLint;
 import android.util.Log;
 
-import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
 
+import java.sql.Array;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import de.hawlandshut.sharedwallet.model.entities.GroupDto;
 import de.hawlandshut.sharedwallet.model.entities.GroupInfoDto;
 import de.hawlandshut.sharedwallet.model.entities.Resource;
+import de.hawlandshut.sharedwallet.model.entities.TransactionDto;
 import de.hawlandshut.sharedwallet.model.methods.IGroupMethods;
 
 public class GroupRepository implements IGroupMethods {
@@ -75,7 +69,16 @@ public class GroupRepository implements IGroupMethods {
         groupsCollection.whereEqualTo(GROUP_ID_FIELD,groupId).get().addOnSuccessListener(getGroupByIdSuccess ->{
             if(getGroupByIdSuccess.getDocuments()!= null){
                 DocumentSnapshot documentSnapshot = getGroupByIdSuccess.getDocuments().get(0);
-                GroupDto groupDto = documentSnapshot.toObject(GroupDto.class);
+                Log.d("GroupEdit",getGroupByIdSuccess.getDocuments().get(0).toString());
+                GroupDto groupDto = new GroupDto(
+                        (String) documentSnapshot.getData().get("groupId"),
+                        (String) documentSnapshot.getData().get("title"),
+                        (List<String>)documentSnapshot.getData().get("memberNames"),
+                        (List<String>)documentSnapshot.getData().get("members"),
+                        (String) documentSnapshot.getData().get("owner"),
+                        (Long) documentSnapshot.getData().get("created"),
+                    (List<TransactionDto>) documentSnapshot.getData().get("transactions")
+                );
                 getGroupByIdMutableLiveData.setValue(Resource.success(groupDto));
             }
             else{

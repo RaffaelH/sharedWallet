@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import de.hawlandshut.sharedwallet.R;
 import de.hawlandshut.sharedwallet.viewmodel.AuthViewModel;
+import de.hawlandshut.sharedwallet.viewmodel.GroupViewModel;
 import de.hawlandshut.sharedwallet.views.activities.MainActivity;
 
 public class AccountFragment extends Fragment implements View.OnClickListener {
@@ -28,6 +29,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     private Button mBtnDelete;
     private EditText mEdtPassword;
     private AuthViewModel mAuthViewModel;
+    private GroupViewModel mGroupViewModel;
 
     public AccountFragment() {
     }
@@ -42,6 +44,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         mEdtPassword = getView().findViewById(R.id.et_account_password);
         mBtnSignOut.setOnClickListener(this);
         mAuthViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
+        mGroupViewModel = new ViewModelProvider(requireActivity()).get(GroupViewModel.class);
     }
 
     @Override
