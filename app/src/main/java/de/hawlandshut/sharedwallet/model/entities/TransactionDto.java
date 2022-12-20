@@ -9,9 +9,9 @@ public class TransactionDto {
     private String creditor;
     private HashMap<String,Double> debtors;
     private double amount;
-    private Date created;
+    private Long created;
 
-    public TransactionDto(String creditorId, String creditor, HashMap<String, Double> debtors, double amount, Date created) {
+    public TransactionDto(String creditorId, String creditor, HashMap<String, Double> debtors, double amount, Long created) {
         this.creditorId = creditorId;
         this.creditor = creditor;
         this.debtors = debtors;
@@ -31,7 +31,7 @@ public class TransactionDto {
         return amount;
     }
 
-    public Date getCreated() {
+    public Long getCreated() {
         return created;
     }
 

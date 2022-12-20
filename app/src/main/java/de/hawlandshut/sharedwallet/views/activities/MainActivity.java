@@ -16,46 +16,37 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import de.hawlandshut.sharedwallet.R;
 import de.hawlandshut.sharedwallet.viewmodel.AuthViewModel;
 import de.hawlandshut.sharedwallet.viewmodel.GroupViewModel;
+import de.hawlandshut.sharedwallet.views.fragments.GroupsFragment;
 
 
 public class MainActivity extends AppCompatActivity {
 
     private AuthViewModel mAuthViewModel;
-    private GroupViewModel mGroupViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.d("Main","onCreat called");
         mAuthViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
-        mGroupViewModel = new ViewModelProvider(this).get(GroupViewModel.class);
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-
         mAuthViewModel.getCurrentFirebaseUser().observe(this, currentFirebaseUser -> {
             if (currentFirebaseUser == null) {
                 Intent intent = new Intent(getApplication(), SignInActivity.class);
                 startActivity(intent);
             } else if(currentFirebaseUser != null) {
-
-                NavController navController = Navigation.findNavController(this, R.id.nav_fragment);
-                BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_view);
-                NavigationUI.setupWithNavController(bottomNavigationView, navController);
+                Intent intent = new Intent(getApplication(), HomeActivity.class);
+                startActivity(intent);
             }
         });
     }
 
-    public void restart(){
-        finish();
-        overridePendingTransition(0, 0);
-        startActivity(getIntent());
-        overridePendingTransition(0, 0);
-    }
+
 
 }
 

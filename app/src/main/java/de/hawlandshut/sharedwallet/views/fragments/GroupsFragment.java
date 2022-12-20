@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,7 +18,11 @@ import android.view.ViewGroup;
 
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
+import java.util.List;
+
 import de.hawlandshut.sharedwallet.R;
+import de.hawlandshut.sharedwallet.model.entities.GroupInfoDto;
+import de.hawlandshut.sharedwallet.model.entities.Resource;
 import de.hawlandshut.sharedwallet.viewmodel.AuthViewModel;
 import de.hawlandshut.sharedwallet.viewmodel.GroupViewModel;
 import de.hawlandshut.sharedwallet.views.activities.CreateGroupActivity;
@@ -28,34 +33,35 @@ public class GroupsFragment extends Fragment implements View.OnClickListener{
     private static final String TAG = "GroupsFragment";
     private ExtendedFloatingActionButton mFltBtnNewGroup;
     private GroupViewModel mGroupViewModel;
-    private AuthViewModel mAuthViewModel;
 
 
     public GroupsFragment() {
         // Required empty public constructor
     }
 
-
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         mFltBtnNewGroup = getView().findViewById(R.id.flt_btn_new_group);
         mFltBtnNewGroup.setOnClickListener(this);
-
-
         RecyclerView recyclerView = getView().findViewById(R.id.rv_group_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         recyclerView.setHasFixedSize(true);
-
         GroupListAdapter adapter = new GroupListAdapter();
         recyclerView.setAdapter(adapter);
-        mAuthViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
+
         mGroupViewModel = new ViewModelProvider(requireActivity()).get(GroupViewModel.class);
-        mGroupViewModel.getAllGroups().observe(this.getActivity(),obs ->{
+
+        mGroupViewModel.getAllGroups().observe(this.getActivity(), (Resource<List<GroupInfoDto>> obs) ->{
+
             switch(obs.status){
                 case SUCCESS:
+                    Log.d("GroupFragment", obs.data.toString());
                     adapter.setGroups(obs.data);
                     break;
                 case ERROR:

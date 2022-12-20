@@ -8,12 +8,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
-
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
-
 import de.hawlandshut.sharedwallet.model.entities.GroupDto;
 import de.hawlandshut.sharedwallet.model.entities.GroupInfoDto;
 import de.hawlandshut.sharedwallet.model.entities.Resource;
@@ -33,6 +31,8 @@ public class GroupRepository implements IGroupMethods {
     private CollectionReference groupsCollection = db.collection(GROUP_COLLECTION_NAME);
     private CollectionReference groupInfoCollection = db.collection(GROUP_INFO_COLLECTION_NAME);
     private MutableLiveData<Resource<List<GroupInfoDto>>> getAllGroupsMutableLiveData = new MutableLiveData<>();
+    private ListenerRegistration allGroupsListener;
+    private ListenerRegistration groupListener;
 
     public static GroupRepository getInstance() {
         if(instance == null) {
@@ -45,7 +45,7 @@ public class GroupRepository implements IGroupMethods {
     public LiveData<Resource<List<GroupInfoDto>>> getAllGroups() {
         if(FirebaseAuth.getInstance().getCurrentUser() != null){
             String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-            groupInfoCollection.whereArrayContains(MEMBERS_FIELD, uid ).orderBy(CREATED_FIELD, Query.Direction.DESCENDING).addSnapshotListener((value, error) -> {
+            allGroupsListener = groupInfoCollection.whereArrayContains(MEMBERS_FIELD, uid ).orderBy(CREATED_FIELD, Query.Direction.DESCENDING).addSnapshotListener((value, error) -> {
                 if(error != null){
                     getAllGroupsMutableLiveData.setValue(Resource.error(error.getMessage(),null));
                 }
@@ -66,10 +66,14 @@ public class GroupRepository implements IGroupMethods {
     @Override
     public LiveData<Resource<GroupDto>> getGroupById(String groupId) {
         MutableLiveData<Resource<GroupDto>> getGroupByIdMutableLiveData = new MutableLiveData<>();
-        groupsCollection.whereEqualTo(GROUP_ID_FIELD,groupId).get().addOnSuccessListener(getGroupByIdSuccess ->{
-            if(getGroupByIdSuccess.getDocuments()!= null){
-                DocumentSnapshot documentSnapshot = getGroupByIdSuccess.getDocuments().get(0);
-                Log.d("GroupEdit",getGroupByIdSuccess.getDocuments().get(0).toString());
+        groupListener = groupsCollection.whereEqualTo(GROUP_ID_FIELD,groupId).addSnapshotListener((value, error) ->{
+
+            if(error!= null){
+                getGroupByIdMutableLiveData.setValue(Resource.error(error.getMessage(),null));
+            }
+            if(!value.isEmpty()){
+                DocumentSnapshot documentSnapshot = value.getDocuments().get(0);
+                Log.d("Group",value.getDocuments().get(0).toString());
                 GroupDto groupDto = new GroupDto(
                         (String) documentSnapshot.getData().get("groupId"),
                         (String) documentSnapshot.getData().get("title"),
@@ -84,8 +88,6 @@ public class GroupRepository implements IGroupMethods {
             else{
                 getGroupByIdMutableLiveData.setValue(Resource.error("Kein Dokument",null));
             }
-        }).addOnFailureListener(getGroupByIdFailure -> {
-            getGroupByIdMutableLiveData.setValue(Resource.error(getGroupByIdFailure.getMessage(),null));
         });
         return getGroupByIdMutableLiveData;
     }
@@ -124,6 +126,18 @@ public class GroupRepository implements IGroupMethods {
         });
 
         return deleteGroupMutableLiveData;
+    }
+
+    @Override
+    public void removeListener(String listener){
+        switch(listener){
+            case "AllGroups":
+                allGroupsListener.remove();
+                return;
+            case "Group":
+                groupListener.remove();
+                return;
+        }
     }
 
     private List<GroupInfoDto> toGroupList(List<DocumentSnapshot> documents){

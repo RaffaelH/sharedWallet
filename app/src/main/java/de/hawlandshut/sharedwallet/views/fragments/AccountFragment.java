@@ -15,10 +15,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+
 import de.hawlandshut.sharedwallet.R;
 import de.hawlandshut.sharedwallet.viewmodel.AuthViewModel;
 import de.hawlandshut.sharedwallet.viewmodel.GroupViewModel;
-import de.hawlandshut.sharedwallet.views.activities.MainActivity;
+import de.hawlandshut.sharedwallet.views.activities.HomeActivity;
 
 public class AccountFragment extends Fragment implements View.OnClickListener {
 
@@ -59,11 +60,13 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         switch(view.getId()){
             case R.id.btn_account_sign_out:
-                Log.d(TAG,"Sign Out");
                 mAuthViewModel.signOut();
-                //restart Main Activity to trigger onStart method
-                ((MainActivity)getActivity()).restart();
+                ((HomeActivity)getActivity()).reset();
                 return;
         }
+
+
     }
+
+
 }

@@ -74,7 +74,6 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
         }
 
         mAuthViewModel.createAccount(email,password, displayName).observe(this,createAccountResource -> {
-
             mLoadingDialog.closeDialog();
             switch(createAccountResource.status){
                 case SUCCESS:

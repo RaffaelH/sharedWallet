@@ -1,6 +1,7 @@
 package de.hawlandshut.sharedwallet.viewmodel;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -28,6 +29,7 @@ public class GroupViewModel extends AndroidViewModel implements IGroupMethods {
 
     @Override
     public LiveData<Resource<List<GroupInfoDto>>> getAllGroups() {
+
         return allGroups;
     }
 
@@ -50,5 +52,11 @@ public class GroupViewModel extends AndroidViewModel implements IGroupMethods {
     public LiveData<Resource<String>> deleteGroup(String groupId) {
         return groupRepository.deleteGroup(groupId);
     }
+
+    @Override
+    public void removeListener(String listener){
+        groupRepository.removeListener(listener);
+    }
+
 
 }

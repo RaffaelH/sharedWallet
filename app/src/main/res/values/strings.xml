@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">sharedWallet</string>
+    <string name="app_name">Geteilte Geldbörse</string>
     <string name="loading">Loading...</string>
     <string name="text_label_1">Gruppen</string>
     <string name="text_label_2">Freunde</string>
@@ -11,4 +11,6 @@
     <string name="gruppenname_eingebn">Gruppenname eingebn</string>
     <string name="gruppenname_eingeben">Gruppenname eingeben</string>
     <string name="sobald_du_diese_gruppe_gespeichert_hast_kannst_du_gruppenmitglieder_hinzuf_gen">Sobald du diese Gruppe gespeichert hast, kannst du Gruppenmitglieder hinzufügen</string>
+    <string name="neue_transaktion">neue Transaktion</string>
+    <string name="neue_transaktion_desc">Neue Transaktion</string>
 </resources>

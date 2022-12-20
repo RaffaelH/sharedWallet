@@ -103,5 +103,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     private void gotoCreateAccount() {
         Intent intent = new Intent(getApplication(), CreateAccountActivity.class);
         startActivity(intent);
+        finish();
     }
 }
