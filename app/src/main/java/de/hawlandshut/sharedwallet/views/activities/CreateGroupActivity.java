@@ -9,16 +9,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
 import de.hawlandshut.sharedwallet.R;
 import de.hawlandshut.sharedwallet.model.entities.GroupDto;
-import de.hawlandshut.sharedwallet.model.entities.TransactionDto;
-import de.hawlandshut.sharedwallet.viewmodel.AuthViewModel;
-import de.hawlandshut.sharedwallet.viewmodel.GroupViewModel;
+import de.hawlandshut.sharedwallet.repository.viewmodel.AuthViewModel;
+import de.hawlandshut.sharedwallet.repository.viewmodel.GroupViewModel;
 import de.hawlandshut.sharedwallet.views.components.LoadingDialog;
 
 public class CreateGroupActivity extends AppCompatActivity implements View.OnClickListener {
@@ -75,8 +72,7 @@ public class CreateGroupActivity extends AppCompatActivity implements View.OnCli
                 Arrays.asList(new String[]{mAuthViewModel.getCurrentFirebaseUser().getValue().getDisplayName()}),
                 Arrays.asList(new String[]{mAuthViewModel.getCurrentFirebaseUser().getValue().getUid()}),
                 mAuthViewModel.getCurrentFirebaseUser().getValue().getUid(),
-                new Date().getTime(),
-                new ArrayList<>()
+                new Date().getTime()
                 );
         return groupDto;
     }

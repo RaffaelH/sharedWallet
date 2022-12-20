@@ -7,7 +7,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +16,8 @@ import android.widget.TextView;
 
 
 import de.hawlandshut.sharedwallet.R;
-import de.hawlandshut.sharedwallet.viewmodel.AuthViewModel;
-import de.hawlandshut.sharedwallet.viewmodel.GroupViewModel;
+import de.hawlandshut.sharedwallet.repository.viewmodel.AuthViewModel;
+import de.hawlandshut.sharedwallet.repository.viewmodel.GroupViewModel;
 import de.hawlandshut.sharedwallet.views.activities.HomeActivity;
 
 public class AccountFragment extends Fragment implements View.OnClickListener {

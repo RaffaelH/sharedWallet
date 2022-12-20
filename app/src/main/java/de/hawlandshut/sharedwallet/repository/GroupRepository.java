@@ -32,7 +32,6 @@ public class GroupRepository implements IGroupMethods {
     private CollectionReference groupInfoCollection = db.collection(GROUP_INFO_COLLECTION_NAME);
     private MutableLiveData<Resource<List<GroupInfoDto>>> getAllGroupsMutableLiveData = new MutableLiveData<>();
     private ListenerRegistration allGroupsListener;
-    private ListenerRegistration groupListener;
 
     public static GroupRepository getInstance() {
         if(instance == null) {
@@ -55,7 +54,7 @@ public class GroupRepository implements IGroupMethods {
                     Log.d("groups",groupInfoDtoList.toString());
                     getAllGroupsMutableLiveData.setValue(Resource.success(groupInfoDtoList));
                 } else {
-                    getAllGroupsMutableLiveData.setValue(Resource.error("kein Dokument",null));
+                    getAllGroupsMutableLiveData.setValue(Resource.error("keine Dokumente",null));
                 }
             });
         }
@@ -66,28 +65,26 @@ public class GroupRepository implements IGroupMethods {
     @Override
     public LiveData<Resource<GroupDto>> getGroupById(String groupId) {
         MutableLiveData<Resource<GroupDto>> getGroupByIdMutableLiveData = new MutableLiveData<>();
-        groupListener = groupsCollection.whereEqualTo(GROUP_ID_FIELD,groupId).addSnapshotListener((value, error) ->{
+        groupsCollection.whereEqualTo(GROUP_ID_FIELD,groupId).get().addOnSuccessListener(success ->{
 
-            if(error!= null){
-                getGroupByIdMutableLiveData.setValue(Resource.error(error.getMessage(),null));
-            }
-            if(!value.isEmpty()){
-                DocumentSnapshot documentSnapshot = value.getDocuments().get(0);
-                Log.d("Group",value.getDocuments().get(0).toString());
+            if(success.getDocuments().get(0).exists()){
+                DocumentSnapshot documentSnapshot = success.getDocuments().get(0);
+                Log.d("Group",success.getDocuments().get(0).toString());
                 GroupDto groupDto = new GroupDto(
                         (String) documentSnapshot.getData().get("groupId"),
                         (String) documentSnapshot.getData().get("title"),
                         (List<String>)documentSnapshot.getData().get("memberNames"),
                         (List<String>)documentSnapshot.getData().get("members"),
                         (String) documentSnapshot.getData().get("owner"),
-                        (Long) documentSnapshot.getData().get("created"),
-                    (List<TransactionDto>) documentSnapshot.getData().get("transactions")
+                        (Long) documentSnapshot.getData().get("created")
                 );
                 getGroupByIdMutableLiveData.setValue(Resource.success(groupDto));
-            }
-            else{
+            }else{
                 getGroupByIdMutableLiveData.setValue(Resource.error("Kein Dokument",null));
             }
+
+        }).addOnFailureListener(failure -> {
+            getGroupByIdMutableLiveData.setValue(Resource.error(failure.getMessage(),null));
         });
         return getGroupByIdMutableLiveData;
     }
@@ -129,20 +126,12 @@ public class GroupRepository implements IGroupMethods {
     }
 
     @Override
-    public void removeListener(String listener){
-        switch(listener){
-            case "AllGroups":
-                allGroupsListener.remove();
-                return;
-            case "Group":
-                groupListener.remove();
-                return;
-        }
+    public void removeListener(){
+        allGroupsListener.remove();
     }
 
     private List<GroupInfoDto> toGroupList(List<DocumentSnapshot> documents){
         List<GroupInfoDto> groupInfoDtoList = new ArrayList<>();
-
 
         for(int i =0; documents.size() > i;i++){
             GroupInfoDto groupInfoDto = new GroupInfoDto(

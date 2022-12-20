@@ -1,4 +1,4 @@
-package de.hawlandshut.sharedwallet.viewmodel;
+package de.hawlandshut.sharedwallet.repository.viewmodel;
 
 import android.app.Application;
 

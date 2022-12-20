@@ -1,7 +1,6 @@
 package de.hawlandshut.sharedwallet.views.components;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,9 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.hawlandshut.sharedwallet.R;
-import de.hawlandshut.sharedwallet.model.entities.GroupDto;
 import de.hawlandshut.sharedwallet.model.entities.GroupInfoDto;
-import de.hawlandshut.sharedwallet.viewmodel.GroupViewModel;
+import de.hawlandshut.sharedwallet.repository.viewmodel.GroupViewModel;
 import de.hawlandshut.sharedwallet.views.activities.GroupEditActivity;
 
 public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.GroupHolder> {

@@ -1,4 +1,4 @@
-package de.hawlandshut.sharedwallet.viewmodel;
+package de.hawlandshut.sharedwallet.repository.viewmodel;
 
 import android.app.Application;
 import android.util.Log;
@@ -54,9 +54,8 @@ public class GroupViewModel extends AndroidViewModel implements IGroupMethods {
     }
 
     @Override
-    public void removeListener(String listener){
-        groupRepository.removeListener(listener);
+    public void removeListener(){
+        groupRepository.removeListener();
     }
-
 
 }

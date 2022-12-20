@@ -6,7 +6,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,8 +22,7 @@ import java.util.List;
 import de.hawlandshut.sharedwallet.R;
 import de.hawlandshut.sharedwallet.model.entities.GroupInfoDto;
 import de.hawlandshut.sharedwallet.model.entities.Resource;
-import de.hawlandshut.sharedwallet.viewmodel.AuthViewModel;
-import de.hawlandshut.sharedwallet.viewmodel.GroupViewModel;
+import de.hawlandshut.sharedwallet.repository.viewmodel.GroupViewModel;
 import de.hawlandshut.sharedwallet.views.activities.CreateGroupActivity;
 import de.hawlandshut.sharedwallet.views.components.GroupListAdapter;
 

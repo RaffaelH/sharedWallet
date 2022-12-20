@@ -11,9 +11,7 @@ import android.os.Bundle;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import de.hawlandshut.sharedwallet.R;
-import de.hawlandshut.sharedwallet.viewmodel.AuthViewModel;
-import de.hawlandshut.sharedwallet.viewmodel.GroupViewModel;
-import de.hawlandshut.sharedwallet.views.fragments.GroupsFragment;
+import de.hawlandshut.sharedwallet.repository.viewmodel.GroupViewModel;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -31,7 +29,7 @@ public class HomeActivity extends AppCompatActivity {
         mGroupViewModel = new ViewModelProvider(this).get(GroupViewModel.class);
     }
     public void reset(){
-        mGroupViewModel.removeListener("AllGroups");
+        mGroupViewModel.removeListener();
         finish();
     }
 

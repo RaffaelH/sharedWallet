@@ -8,7 +8,7 @@ import android.util.Log;
 import android.widget.TextView;
 
 import de.hawlandshut.sharedwallet.R;
-import de.hawlandshut.sharedwallet.viewmodel.GroupViewModel;
+import de.hawlandshut.sharedwallet.repository.viewmodel.GroupViewModel;
 import de.hawlandshut.sharedwallet.views.components.LoadingDialog;
 
 public class GroupEditActivity extends AppCompatActivity {
@@ -60,6 +60,6 @@ public class GroupEditActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mGroupViewModel.removeListener("Group");
+        mGroupViewModel.removeListener();
     }
 }

@@ -20,6 +20,6 @@ public interface IGroupMethods {
 
     LiveData<Resource<String>> deleteGroup(String groupId);
 
-    void removeListener(String listener);
+    void removeListener();
 
 }

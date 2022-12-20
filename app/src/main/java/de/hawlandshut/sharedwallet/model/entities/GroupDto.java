@@ -9,16 +9,14 @@ public class GroupDto {
     private List<String> members;
     private String owner;
     private Long created;
-    private List<TransactionDto> transactions;
 
-    public GroupDto(String groupId, String title, List<String> memberNames, List<String> memberId, String owner, Long  created, List<TransactionDto> transactions) {
+    public GroupDto(String groupId, String title, List<String> memberNames, List<String> memberId, String owner, Long  created) {
         this.groupId = groupId;
         this.title = title;
         this.memberNames = memberNames;
         this.members = memberId;
         this.owner = owner;
         this.created = created;
-        this.transactions = transactions;
     }
 
     public String getGroupId() {
@@ -43,10 +41,6 @@ public class GroupDto {
 
     public Long getCreated() {
         return created;
-    }
-
-    public List<TransactionDto> getTransactions() {
-        return transactions;
     }
 
 }

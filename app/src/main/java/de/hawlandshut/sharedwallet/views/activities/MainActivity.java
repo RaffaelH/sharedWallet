@@ -2,21 +2,13 @@ package de.hawlandshut.sharedwallet.views.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStore;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.NavigationUI;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import de.hawlandshut.sharedwallet.R;
-import de.hawlandshut.sharedwallet.viewmodel.AuthViewModel;
-import de.hawlandshut.sharedwallet.viewmodel.GroupViewModel;
-import de.hawlandshut.sharedwallet.views.fragments.GroupsFragment;
+import de.hawlandshut.sharedwallet.repository.viewmodel.AuthViewModel;
 
 
 public class MainActivity extends AppCompatActivity {
