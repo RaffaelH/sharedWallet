@@ -20,18 +20,19 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import java.util.List;
 
 import de.hawlandshut.sharedwallet.R;
-import de.hawlandshut.sharedwallet.model.entities.GroupInfoDto;
-import de.hawlandshut.sharedwallet.model.entities.Resource;
-import de.hawlandshut.sharedwallet.repository.viewmodel.GroupViewModel;
+import de.hawlandshut.sharedwallet.model.entities.GroupDto;
+import de.hawlandshut.sharedwallet.model.retro.Resource;
+import de.hawlandshut.sharedwallet.viewmodel.GroupViewModel;
 import de.hawlandshut.sharedwallet.views.activities.CreateGroupActivity;
 import de.hawlandshut.sharedwallet.views.components.GroupListAdapter;
+import de.hawlandshut.sharedwallet.views.components.LoadingDialog;
 
 public class GroupsFragment extends Fragment implements View.OnClickListener{
 
     private static final String TAG = "GroupsFragment";
     private ExtendedFloatingActionButton mFltBtnNewGroup;
     private GroupViewModel mGroupViewModel;
-
+    private LoadingDialog mLoadingDialog;
 
     public GroupsFragment() {
         // Required empty public constructor
@@ -47,6 +48,7 @@ public class GroupsFragment extends Fragment implements View.OnClickListener{
         super.onViewCreated(view, savedInstanceState);
         mFltBtnNewGroup = getView().findViewById(R.id.flt_btn_new_group);
         mFltBtnNewGroup.setOnClickListener(this);
+        mLoadingDialog = new LoadingDialog(view.getContext());
         RecyclerView recyclerView = getView().findViewById(R.id.rv_group_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         recyclerView.setHasFixedSize(true);
@@ -54,9 +56,9 @@ public class GroupsFragment extends Fragment implements View.OnClickListener{
         recyclerView.setAdapter(adapter);
 
         mGroupViewModel = new ViewModelProvider(requireActivity()).get(GroupViewModel.class);
-
-        mGroupViewModel.getAllGroups().observe(this.getActivity(), (Resource<List<GroupInfoDto>> obs) ->{
-
+        mLoadingDialog.showDialog();
+        mGroupViewModel.getAllGroups().observe(this.getActivity(), (Resource<List<GroupDto>> obs) ->{
+            mLoadingDialog.closeDialog();
             switch(obs.status){
                 case SUCCESS:
                     Log.d("GroupFragment", obs.data.toString());

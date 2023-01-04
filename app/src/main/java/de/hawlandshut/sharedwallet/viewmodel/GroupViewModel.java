@@ -1,25 +1,23 @@
-package de.hawlandshut.sharedwallet.repository.viewmodel;
+package de.hawlandshut.sharedwallet.viewmodel;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import de.hawlandshut.sharedwallet.model.entities.GroupDto;
-import de.hawlandshut.sharedwallet.model.entities.GroupInfoDto;
-import de.hawlandshut.sharedwallet.model.entities.Resource;
+import de.hawlandshut.sharedwallet.model.retro.Resource;
 import de.hawlandshut.sharedwallet.model.methods.IGroupMethods;
 import de.hawlandshut.sharedwallet.repository.GroupRepository;
 
 public class GroupViewModel extends AndroidViewModel implements IGroupMethods {
 
     private GroupRepository groupRepository;
-    private LiveData<Resource<List<GroupInfoDto>>> allGroups;
+    private LiveData<Resource<List<GroupDto>>> allGroups;
 
     public GroupViewModel(@NonNull Application application) {
         super(application);
@@ -28,8 +26,7 @@ public class GroupViewModel extends AndroidViewModel implements IGroupMethods {
     }
 
     @Override
-    public LiveData<Resource<List<GroupInfoDto>>> getAllGroups() {
-
+    public LiveData<Resource<List<GroupDto>>> getAllGroups() {
         return allGroups;
     }
 
@@ -56,6 +53,13 @@ public class GroupViewModel extends AndroidViewModel implements IGroupMethods {
     @Override
     public void removeListener(){
         groupRepository.removeListener();
+    }
+
+    public void resetAllGroups(){
+        System.out.println(allGroups);
+        groupRepository.setGetAllGroupsMutableLiveData(new MutableLiveData<>());
+        System.out.println(allGroups);
+        allGroups = groupRepository.getAllGroups();
     }
 
 }

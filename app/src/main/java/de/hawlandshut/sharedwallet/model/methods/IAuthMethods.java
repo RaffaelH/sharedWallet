@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData;
 
 import com.google.firebase.auth.FirebaseUser;
 
-import de.hawlandshut.sharedwallet.model.entities.Resource;
+import de.hawlandshut.sharedwallet.model.retro.Resource;
 
 public interface IAuthMethods {
 

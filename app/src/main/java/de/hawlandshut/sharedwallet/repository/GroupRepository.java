@@ -13,9 +13,7 @@ import com.google.firebase.firestore.Query;
 import java.util.ArrayList;
 import java.util.List;
 import de.hawlandshut.sharedwallet.model.entities.GroupDto;
-import de.hawlandshut.sharedwallet.model.entities.GroupInfoDto;
-import de.hawlandshut.sharedwallet.model.entities.Resource;
-import de.hawlandshut.sharedwallet.model.entities.TransactionDto;
+import de.hawlandshut.sharedwallet.model.retro.Resource;
 import de.hawlandshut.sharedwallet.model.methods.IGroupMethods;
 
 public class GroupRepository implements IGroupMethods {
@@ -27,11 +25,12 @@ public class GroupRepository implements IGroupMethods {
     private final String GROUP_INFO_COLLECTION_NAME = "groupinfo";
     private final String MEMBERS_FIELD ="members";
     private final String GROUP_ID_FIELD ="groupId";
+
     private final String CREATED_FIELD ="created";
     private CollectionReference groupsCollection = db.collection(GROUP_COLLECTION_NAME);
-    private CollectionReference groupInfoCollection = db.collection(GROUP_INFO_COLLECTION_NAME);
-    private MutableLiveData<Resource<List<GroupInfoDto>>> getAllGroupsMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<Resource<List<GroupDto>>> getAllGroupsMutableLiveData = new MutableLiveData<>();
     private ListenerRegistration allGroupsListener;
+
 
     public static GroupRepository getInstance() {
         if(instance == null) {
@@ -41,18 +40,19 @@ public class GroupRepository implements IGroupMethods {
     }
 
     @Override
-    public LiveData<Resource<List<GroupInfoDto>>> getAllGroups() {
+    public LiveData<Resource<List<GroupDto>>> getAllGroups() {
         if(FirebaseAuth.getInstance().getCurrentUser() != null){
             String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-            allGroupsListener = groupInfoCollection.whereArrayContains(MEMBERS_FIELD, uid ).orderBy(CREATED_FIELD, Query.Direction.DESCENDING).addSnapshotListener((value, error) -> {
+            allGroupsListener = groupsCollection.whereArrayContains(MEMBERS_FIELD, uid ).orderBy(CREATED_FIELD, Query.Direction.DESCENDING).addSnapshotListener((value, error) -> {
+
                 if(error != null){
                     getAllGroupsMutableLiveData.setValue(Resource.error(error.getMessage(),null));
                 }
                 if (value != null &&  !value.isEmpty()) {
                     List<DocumentSnapshot> documents = value.getDocuments();
-                    List<GroupInfoDto> groupInfoDtoList = toGroupList(documents);
-                    Log.d("groups",groupInfoDtoList.toString());
-                    getAllGroupsMutableLiveData.setValue(Resource.success(groupInfoDtoList));
+                    List<GroupDto> groupDtoList = toGroupList(documents);
+                    Log.d("groups",groupDtoList.toString());
+                    getAllGroupsMutableLiveData.setValue(Resource.success(groupDtoList));
                 } else {
                     getAllGroupsMutableLiveData.setValue(Resource.error("keine Dokumente",null));
                 }
@@ -92,7 +92,7 @@ public class GroupRepository implements IGroupMethods {
     @Override
     public LiveData<Resource<String>> addGroup(GroupDto group) {
         MutableLiveData<Resource<String>> addGroupMutableLiveData = new MutableLiveData<>();
-        groupsCollection.add(group).addOnSuccessListener( addGroupSuccess -> {
+        groupsCollection.add(group).addOnSuccessListener(addGroupSuccess -> {
             addGroupMutableLiveData.setValue(Resource.success("success"));
         }).addOnFailureListener( addGroupFailure -> {
             addGroupMutableLiveData.setValue(Resource.error(addGroupFailure.getMessage(),null));
@@ -116,7 +116,7 @@ public class GroupRepository implements IGroupMethods {
     @Override
     public LiveData<Resource<String>> deleteGroup(String groupId) {
         MutableLiveData<Resource<String>> deleteGroupMutableLiveData = new MutableLiveData<>();
-        groupsCollection.document(groupId).delete().addOnSuccessListener(groupDelteSuccess ->{
+        groupsCollection.document(groupId).delete().addOnSuccessListener(groupDeleteSuccess ->{
             deleteGroupMutableLiveData.setValue(Resource.success("success"));
         }).addOnFailureListener(groupDeleteFailure -> {
             deleteGroupMutableLiveData.setValue(Resource.error(groupDeleteFailure.getMessage(),null));
@@ -127,24 +127,31 @@ public class GroupRepository implements IGroupMethods {
 
     @Override
     public void removeListener(){
-        allGroupsListener.remove();
+        if(allGroupsListener != null){
+            allGroupsListener.remove();
+        }
     }
 
-    private List<GroupInfoDto> toGroupList(List<DocumentSnapshot> documents){
-        List<GroupInfoDto> groupInfoDtoList = new ArrayList<>();
+    public void setGetAllGroupsMutableLiveData(MutableLiveData<Resource<List<GroupDto>>> getAllGroupsMutableLiveData) {
+        this.getAllGroupsMutableLiveData = getAllGroupsMutableLiveData;
+    }
 
-        for(int i =0; documents.size() > i;i++){
-            GroupInfoDto groupInfoDto = new GroupInfoDto(
-                    (String) documents.get(i).getData().get("title"),
+    private List<GroupDto> toGroupList(List<DocumentSnapshot> documents){
+        List<GroupDto> groups = new ArrayList<>();
+
+        for(int i =0; i < documents.size();i++){
+            GroupDto groupDto = new GroupDto(
                     (String) documents.get(i).getData().get("groupId"),
+                    (String) documents.get(i).getData().get("title"),
                     (List<String>)documents.get(i).getData().get("memberNames"),
                     (List<String>)documents.get(i).getData().get("members"),
+                    (String) documents.get(i).getData().get("owner"),
                     (Long) documents.get(i).getData().get("created")
-            );
 
-            groupInfoDtoList.add(groupInfoDto);
+            );
+            groups.add(groupDto);
         }
-        return groupInfoDtoList;
+        return groups;
     }
 
 }

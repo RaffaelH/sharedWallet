@@ -1,58 +1,44 @@
 package de.hawlandshut.sharedwallet.views.fragments;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import de.hawlandshut.sharedwallet.R;
+import de.hawlandshut.sharedwallet.viewmodel.InviteViewModel;
+import de.hawlandshut.sharedwallet.views.activities.CreateAccountActivity;
+import de.hawlandshut.sharedwallet.views.activities.InviteFriendsActivity;
 
-public class FriendsFragment extends Fragment {
+public class FriendsFragment extends Fragment implements View.OnClickListener {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-    private static final String TAG = "FriendsFragment";
+    private InviteViewModel mFriendsViewModel;
+    private Button mBtnInviteFriends;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public FriendsFragment() {
+    public FriendsFragment(){
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FirendsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static FriendsFragment newInstance(String param1, String param2) {
-        FriendsFragment fragment = new FriendsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG,"onCreate called");
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mBtnInviteFriends = view.findViewById(R.id.flt_btn_invite_friends);
+        mFriendsViewModel = new ViewModelProvider(requireActivity()).get(InviteViewModel.class);
+        mBtnInviteFriends.setOnClickListener(this);
     }
 
     @Override
@@ -61,4 +47,26 @@ public class FriendsFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_firends, container, false);
     }
+
+    @Override
+    public void onClick(View view) {
+        switch(view.getId()){
+            case R.id.flt_btn_invite_friends:
+                Intent intent = new Intent(getActivity(), InviteFriendsActivity.class);
+                startActivity(intent);
+            return;
+        }
+    }
+
+    private void onShareClicked(){
+        Uri link = mFriendsViewModel.generateContentLink();
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, link.toString());
+
+        startActivity(Intent.createChooser(intent, "Share Link"));
+
+    }
+
 }

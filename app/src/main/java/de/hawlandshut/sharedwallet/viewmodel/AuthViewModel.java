@@ -1,4 +1,4 @@
-package de.hawlandshut.sharedwallet.repository.viewmodel;
+package de.hawlandshut.sharedwallet.viewmodel;
 
 import android.app.Application;
 
@@ -7,7 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import com.google.firebase.auth.FirebaseUser;
 
-import de.hawlandshut.sharedwallet.model.entities.Resource;
+import de.hawlandshut.sharedwallet.model.retro.Resource;
 import de.hawlandshut.sharedwallet.model.methods.IAuthMethods;
 import de.hawlandshut.sharedwallet.repository.AuthRepository;
 

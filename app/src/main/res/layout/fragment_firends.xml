@@ -7,8 +7,36 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <androidx.recyclerview.widget.RecyclerView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <Space
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/flt_btn_invite_friends"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="80dp"
+            android:layout_marginStart="190dp"
+            android:layout_marginEnd="20dp"
+            android:layout_gravity="bottom"
+            android:gravity="center_horizontal"
+            android:contentDescription="@string/freunde_einladen"
+            android:text="@string/freunde_einladen"
+            />
+
+    </LinearLayout>
+
+
+
 
 </FrameLayout>

@@ -6,15 +6,17 @@ public class TransactionDto {
 
     private String transactionId;
     private String groupId;
+    private String description;
     private String creditorId;
     private String creditor;
     private HashMap<String,Double> debtors;
     private double amount;
     private Long created;
 
-    public TransactionDto(String transactionId, String groupId, String creditorId, String creditor, HashMap<String, Double> debtors, double amount, Long created) {
+    public TransactionDto(String transactionId, String groupId,String description, String creditorId, String creditor, HashMap<String, Double> debtors, double amount, Long created) {
         this.transactionId = transactionId;
         this.groupId = groupId;
+        this.description = description;
         this.creditorId = creditorId;
         this.creditor = creditor;
         this.debtors = debtors;
@@ -48,6 +50,10 @@ public class TransactionDto {
 
     public String getGroupId() {
         return groupId;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
 

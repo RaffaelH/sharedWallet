@@ -5,12 +5,11 @@ import androidx.lifecycle.LiveData;
 import java.util.List;
 
 import de.hawlandshut.sharedwallet.model.entities.GroupDto;
-import de.hawlandshut.sharedwallet.model.entities.GroupInfoDto;
-import de.hawlandshut.sharedwallet.model.entities.Resource;
+import de.hawlandshut.sharedwallet.model.retro.Resource;
 
 public interface IGroupMethods {
 
-    LiveData<Resource<List<GroupInfoDto>>> getAllGroups();
+    LiveData<Resource<List<GroupDto>>> getAllGroups();
 
     LiveData<Resource<GroupDto>> getGroupById(String groupId);
 

@@ -1,4 +1,4 @@
-package de.hawlandshut.sharedwallet.repository.viewmodel;
+package de.hawlandshut.sharedwallet.viewmodel;
 
 import android.app.Application;
 
@@ -8,7 +8,7 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
-import de.hawlandshut.sharedwallet.model.entities.Resource;
+import de.hawlandshut.sharedwallet.model.retro.Resource;
 import de.hawlandshut.sharedwallet.model.entities.TransactionDto;
 import de.hawlandshut.sharedwallet.model.methods.ITransactionMethods;
 import de.hawlandshut.sharedwallet.repository.TransactionRepository;
@@ -18,6 +18,8 @@ public class TransactionViewModel extends AndroidViewModel implements ITransacti
     private TransactionRepository transactionRepository;
 
     public TransactionViewModel(@NonNull Application application) {
+
+
         super(application);
         transactionRepository = TransactionRepository.getInstance();
     }

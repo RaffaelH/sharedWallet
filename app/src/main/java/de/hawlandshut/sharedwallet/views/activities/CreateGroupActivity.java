@@ -14,24 +14,25 @@ import java.util.Date;
 
 import de.hawlandshut.sharedwallet.R;
 import de.hawlandshut.sharedwallet.model.entities.GroupDto;
-import de.hawlandshut.sharedwallet.repository.viewmodel.AuthViewModel;
-import de.hawlandshut.sharedwallet.repository.viewmodel.GroupViewModel;
+import de.hawlandshut.sharedwallet.viewmodel.AuthViewModel;
+import de.hawlandshut.sharedwallet.viewmodel.GroupViewModel;
 import de.hawlandshut.sharedwallet.views.components.LoadingDialog;
 
 public class CreateGroupActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private EditText mEdtGroupTitel;
+    private EditText mEdtGroupTitle;
     private Button mBtnCreateGroup;
     private AuthViewModel mAuthViewModel;
     private GroupViewModel mGroupViewModel;
     private LoadingDialog mLoadingDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_group);
 
-        mEdtGroupTitel = findViewById(R.id.et_create_group_title);
+        mEdtGroupTitle = findViewById(R.id.et_create_group_title);
         mBtnCreateGroup = findViewById(R.id.btn_create_group);
         mLoadingDialog = new LoadingDialog(this);
         mBtnCreateGroup.setOnClickListener(this);
@@ -43,7 +44,7 @@ public class CreateGroupActivity extends AppCompatActivity implements View.OnCli
     public void onClick(View view) {
         switch(view.getId()){
             case R.id.btn_create_group:
-                if(mEdtGroupTitel != null){
+                if(mEdtGroupTitle != null){
                     addGroup();
                 }
         }
@@ -68,7 +69,7 @@ public class CreateGroupActivity extends AppCompatActivity implements View.OnCli
     private GroupDto setCreateGroupDto(){
         GroupDto groupDto = new GroupDto(
                 "",
-                mEdtGroupTitel.getText().toString(),
+                mEdtGroupTitle.getText().toString(),
                 Arrays.asList(new String[]{mAuthViewModel.getCurrentFirebaseUser().getValue().getDisplayName()}),
                 Arrays.asList(new String[]{mAuthViewModel.getCurrentFirebaseUser().getValue().getUid()}),
                 mAuthViewModel.getCurrentFirebaseUser().getValue().getUid(),

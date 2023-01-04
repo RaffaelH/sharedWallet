@@ -16,8 +16,8 @@ import android.widget.TextView;
 
 
 import de.hawlandshut.sharedwallet.R;
-import de.hawlandshut.sharedwallet.repository.viewmodel.AuthViewModel;
-import de.hawlandshut.sharedwallet.repository.viewmodel.GroupViewModel;
+import de.hawlandshut.sharedwallet.viewmodel.AuthViewModel;
+import de.hawlandshut.sharedwallet.viewmodel.GroupViewModel;
 import de.hawlandshut.sharedwallet.views.activities.HomeActivity;
 
 public class AccountFragment extends Fragment implements View.OnClickListener {

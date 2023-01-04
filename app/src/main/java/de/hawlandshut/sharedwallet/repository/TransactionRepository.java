@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import de.hawlandshut.sharedwallet.model.entities.Resource;
+import de.hawlandshut.sharedwallet.model.retro.Resource;
 import de.hawlandshut.sharedwallet.model.entities.TransactionDto;
 import de.hawlandshut.sharedwallet.model.methods.ITransactionMethods;
 
@@ -77,6 +77,7 @@ public class TransactionRepository implements ITransactionMethods {
             TransactionDto transaction = new TransactionDto(
                     (String) documents.get(i).getData().get("transactionId"),
                     (String) documents.get(i).getData().get("groupId"),
+                    (String) documents.get(i).getData().get("description"),
                     (String) documents.get(i).getData().get("creditorId"),
                     (String) documents.get(i).getData().get("creditor"),
                     (HashMap<String,Double>) documents.get(i).getData().get("debtors"),

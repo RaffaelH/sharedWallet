@@ -11,7 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import de.hawlandshut.sharedwallet.R;
-import de.hawlandshut.sharedwallet.repository.viewmodel.AuthViewModel;
+import de.hawlandshut.sharedwallet.viewmodel.AuthViewModel;
 import de.hawlandshut.sharedwallet.views.components.LoadingDialog;
 
 public class SignInActivity extends AppCompatActivity implements View.OnClickListener {
@@ -102,6 +102,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     private void gotoCreateAccount() {
         Intent intent = new Intent(getApplication(), CreateAccountActivity.class);
         startActivity(intent);
-        finish();
+
     }
 }

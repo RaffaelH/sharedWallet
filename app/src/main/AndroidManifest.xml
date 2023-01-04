@@ -13,7 +13,21 @@
         android:theme="@style/Theme.SharedWallet"
         tools:targetApi="31">
         <activity
-            android:name=".CreateTransactionActivity"
+            android:name=".views.activities.FriendRequestActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".views.activities.InviteFriendsActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".views.activities.CreateTransactionActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -41,13 +55,6 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".views.activities.ManageAccountActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
             android:name=".views.activities.CreateAccountActivity"
             android:exported="false">
             <meta-data
@@ -69,11 +76,29 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="example.com"
+                    android:scheme="https" />
+            </intent-filter>
 
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
+        <service
+            android:name=".service.PushNotificationService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

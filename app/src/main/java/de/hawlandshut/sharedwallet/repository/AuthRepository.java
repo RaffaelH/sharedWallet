@@ -1,18 +1,34 @@
 package de.hawlandshut.sharedwallet.repository;
 
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.auth.User;
+import com.google.firebase.messaging.FirebaseMessaging;
 
-import de.hawlandshut.sharedwallet.model.entities.Resource;
+import java.util.ArrayList;
+
+import de.hawlandshut.sharedwallet.model.entities.UserDto;
+import de.hawlandshut.sharedwallet.model.retro.Resource;
 import de.hawlandshut.sharedwallet.model.methods.IAuthMethods;
 
 public class AuthRepository implements IAuthMethods {
-    private final String TAG = "AuthRepository";
     private static AuthRepository instance;
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final String USER_COLLECTION_NAME = "users";
+    private CollectionReference userCollection = db.collection(USER_COLLECTION_NAME);
+    private int retryCount = 0;
+
 
     public static AuthRepository getInstance() {
         if(instance == null) {
@@ -50,9 +66,12 @@ public class AuthRepository implements IAuthMethods {
         firebaseAuth.createUserWithEmailAndPassword(email,password)
             .addOnSuccessListener(authTask -> {
                 //set display name
+                setUser(authTask.getUser().getUid(),email,displayName);
                 firebaseAuth.getCurrentUser().updateProfile(new UserProfileChangeRequest.Builder()
                         .setDisplayName(displayName).build()).addOnSuccessListener(update -> {
                     createAccountMutableLiveData.setValue(Resource.success("success"));
+
+
                 }).addOnFailureListener(failure ->{
                     createAccountMutableLiveData.setValue(Resource.error(failure.getMessage(),null));
                 });
@@ -60,6 +79,8 @@ public class AuthRepository implements IAuthMethods {
             Log.d("Auth",authFailure.getMessage());
             createAccountMutableLiveData.setValue(Resource.error(authFailure.getMessage(),null));
         });
+
+
         return createAccountMutableLiveData;
     }
 
@@ -68,4 +89,22 @@ public class AuthRepository implements IAuthMethods {
         firebaseAuth.signOut();
     }
 
+    private void setUser(String uid,String email, String displayName){
+        FirebaseMessaging.getInstance().getToken().addOnSuccessListener(token->{
+                    UserDto user = new UserDto(
+                            uid,
+                            email,
+                            displayName,
+                            token,
+                            new ArrayList<>()
+                    );
+                    userCollection.document(uid).set(user).addOnSuccessListener(success ->{
+                        Log.d("SetUser", "success");
+                    }).addOnFailureListener(failure -> {
+                        Log.d("SetUser", failure.getMessage());
+                    });
+                }).addOnFailureListener(failure ->{
+                    Log.d("GetToken", failure.getMessage());
+                });
+    }
 }

@@ -1,6 +1,7 @@
 package de.hawlandshut.sharedwallet.views.components;
 
 import android.content.Intent;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,13 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.hawlandshut.sharedwallet.R;
-import de.hawlandshut.sharedwallet.model.entities.GroupInfoDto;
-import de.hawlandshut.sharedwallet.repository.viewmodel.GroupViewModel;
+import de.hawlandshut.sharedwallet.model.entities.GroupDto;
 import de.hawlandshut.sharedwallet.views.activities.GroupEditActivity;
 
 public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.GroupHolder> {
 
-    private List<GroupInfoDto> groups = new ArrayList<>();
+    private List<GroupDto> groups = new ArrayList<>();
 
     @NonNull
     @Override
@@ -40,10 +40,10 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.Grou
         {
             holder.cvCard.setBackgroundResource(R.color.white);
         }
-        GroupInfoDto groupInfo = groups.get(position);
+        GroupDto groupInfo = groups.get(position);
         holder.tvTitle.setText(groupInfo.getTitle());
         holder.tvMembers.setText(String.valueOf(groupInfo.getMemberNames()));
-        holder.groupId = groups.get(position).getGroupId();
+        holder.currentGroup = groups.get(position);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.Grou
         return groups.size();
     }
 
-    public void setGroups(List<GroupInfoDto> groups){
+    public void setGroups(List<GroupDto> groups){
         this.groups = groups;
         notifyDataSetChanged();
     }
@@ -60,8 +60,7 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.Grou
         private CardView cvCard;
         private TextView tvTitle;
         private TextView tvMembers;
-        private String groupId;
-        private GroupViewModel groupViewModel;
+        private GroupDto currentGroup;
 
         public GroupHolder(View itemView){
             super(itemView);
@@ -70,13 +69,13 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.Grou
             cvCard = itemView.findViewById(R.id.cv_group_item);
 
             itemView.setOnClickListener(view ->{
-                Log.d("GroupHolder",groupId);
+                Log.d("Adapter: ", currentGroup.getTitle());
+
                 itemView.getContext()
                         .startActivity(new Intent(itemView.getContext(), GroupEditActivity.class)
-                                .putExtra("groupId",groupId));
+                                .putExtra("groupDto", (Parcelable)currentGroup));
                     });
         }
-
     }
 
 

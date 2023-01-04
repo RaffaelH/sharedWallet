@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
+    tools:context=".views.activities.InviteFriendsActivity">
+
+    <EditText
+        android:id="@+id/et_invite_friend_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:hint="Name des Freundes"
+        android:inputType="text"
+        />
+
+    <Button
+        android:id="@+id/btn_search_friend"
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content"
+        android:text="Freund Suchen" />
+
+    <Button
+        android:id="@+id/btn_share_app_link"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:text="Link generieren"  />
+
+    <TextView
+        android:id="@+id/tv_search_friend_result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:hint=""
+        android:lines="2"
+        android:textColor="@color/red"
+        android:inputType="text"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_search_friends_result"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+
+
+</androidx.appcompat.widget.LinearLayoutCompat>

@@ -13,4 +13,8 @@
     <string name="sobald_du_diese_gruppe_gespeichert_hast_kannst_du_gruppenmitglieder_hinzuf_gen">Sobald du diese Gruppe gespeichert hast, kannst du Gruppenmitglieder hinzufügen</string>
     <string name="neue_transaktion">neue Transaktion</string>
     <string name="neue_transaktion_desc">Neue Transaktion</string>
+    <string name="beschreibung">Beschreibung</string>
+    <string name="amount">Betrag</string>
+    <string name="freunde_hinzuf_gen">Freunde Hinzufügen</string>
+    <string name="freunde_einladen">Freunde einladen</string>
 </resources>

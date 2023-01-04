@@ -5,7 +5,7 @@ import android.text.TextUtils;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Validator {
+public class Validators {
 
     public static boolean isRequiredLength(int requiredLength, String string){
         return string.length() >= requiredLength;

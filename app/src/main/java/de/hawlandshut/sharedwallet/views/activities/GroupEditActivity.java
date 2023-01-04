@@ -8,7 +8,8 @@ import android.util.Log;
 import android.widget.TextView;
 
 import de.hawlandshut.sharedwallet.R;
-import de.hawlandshut.sharedwallet.repository.viewmodel.GroupViewModel;
+import de.hawlandshut.sharedwallet.model.entities.GroupDto;
+import de.hawlandshut.sharedwallet.viewmodel.GroupViewModel;
 import de.hawlandshut.sharedwallet.views.components.LoadingDialog;
 
 public class GroupEditActivity extends AppCompatActivity {
@@ -27,34 +28,12 @@ public class GroupEditActivity extends AppCompatActivity {
         mLoadingDialog = new LoadingDialog(this);
         mTvTitle = findViewById(R.id.tv_group_edit_title);
         mTvMembers = findViewById(R.id.tv_group_edit_members);
-
-        mLoadingDialog.showDialog();
         mGroupViewModel = new ViewModelProvider(this).get(GroupViewModel.class);
-        Bundle extras = getIntent().getExtras();
 
-        if(extras != null) {
-           mGroupViewModel.getGroupById(extras.getString("groupId")).observe(this, groupDtoResource -> {
-               mLoadingDialog.closeDialog();
-               switch(groupDtoResource.status){
-                   case SUCCESS:
+            GroupDto group = getIntent().getParcelableExtra("groupDto");
+            mTvTitle.setText(group.getTitle());
+            mTvMembers.setText(String.valueOf(group.getMemberNames()));
 
-                       Log.d("GroupEdit",groupDtoResource.data.getTitle()+" "+ groupDtoResource.data.getGroupId());
-                       mTvTitle.setText(groupDtoResource.data.getTitle());
-                       mTvMembers.setText(String.valueOf(groupDtoResource.data.getMemberNames()));
-                       break;
-                   case ERROR:
-                       setContentView(R.layout.error_view);
-                       mTvErrorMsg.setText(groupDtoResource.message);
-                       break;
-                   default:
-                       Log.d("GroupEdit","default");
-                       break;
-               }
-           });
-        } else {
-            setContentView(R.layout.error_view);
-            mTvErrorMsg.setText("Keine Daten vorhanden.");
-        }
     }
 
     @Override
