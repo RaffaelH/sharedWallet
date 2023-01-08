@@ -4,15 +4,23 @@ import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
 import de.hawlandshut.sharedwallet.model.entities.GroupDto;
+import de.hawlandshut.sharedwallet.model.entities.UserInfoDto;
 import de.hawlandshut.sharedwallet.model.retro.Resource;
 import de.hawlandshut.sharedwallet.model.methods.IGroupMethods;
 
@@ -22,8 +30,7 @@ public class GroupRepository implements IGroupMethods {
     private static GroupRepository instance;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final String GROUP_COLLECTION_NAME = "groups";
-    private final String GROUP_INFO_COLLECTION_NAME = "groupinfo";
-    private final String MEMBERS_FIELD ="members";
+    private final String MEMBERS_FIELD ="memberIds";
     private final String GROUP_ID_FIELD ="groupId";
 
     private final String CREATED_FIELD ="created";
@@ -69,12 +76,13 @@ public class GroupRepository implements IGroupMethods {
 
             if(success.getDocuments().get(0).exists()){
                 DocumentSnapshot documentSnapshot = success.getDocuments().get(0);
-                Log.d("Group",success.getDocuments().get(0).toString());
+                ArrayList<Map<String,String>> membersDocs = (ArrayList<Map<String,String>> ) documentSnapshot.getData().get("members");
+                List<UserInfoDto> members = mapToList(membersDocs);
                 GroupDto groupDto = new GroupDto(
                         (String) documentSnapshot.getData().get("groupId"),
                         (String) documentSnapshot.getData().get("title"),
-                        (List<String>)documentSnapshot.getData().get("memberNames"),
-                        (List<String>)documentSnapshot.getData().get("members"),
+                        members,
+                        (List<String>) documentSnapshot.getData().get("memberIds"),
                         (String) documentSnapshot.getData().get("owner"),
                         (Long) documentSnapshot.getData().get("created")
                 );
@@ -101,13 +109,20 @@ public class GroupRepository implements IGroupMethods {
     }
 
     @Override
-    public LiveData<Resource<String>> updateGroup(String groupId,GroupDto group) {
+    public LiveData<Resource<String>> updateMembers(String groupId,UserInfoDto newMember) {
         MutableLiveData<Resource<String>> updateGroupMutableLiveData = new MutableLiveData<>();
 
-        groupsCollection.document(groupId).set(group).addOnSuccessListener(groupUpdateSuccess -> {
-            updateGroupMutableLiveData.setValue(Resource.success("success"));
-        }).addOnFailureListener(groupUpdateFailure -> {
-            updateGroupMutableLiveData.setValue(Resource.error(groupUpdateFailure.getMessage(),null));
+        Task<QuerySnapshot> query = groupsCollection.whereEqualTo(GROUP_ID_FIELD,groupId).get();
+
+        query.addOnSuccessListener(success -> {
+            success.getDocuments().get(0).getReference().update("members",
+                    FieldValue.arrayUnion(newMember),"memberIds",FieldValue.arrayUnion(newMember.getUserId())).addOnSuccessListener(updateSuccess ->{
+                updateGroupMutableLiveData.setValue(Resource.success("success"));
+            }).addOnFailureListener(failure -> {
+                updateGroupMutableLiveData.setValue(Resource.error(failure.getMessage(),null));
+            });
+        }).addOnFailureListener(failure -> {
+            updateGroupMutableLiveData.setValue(Resource.error(failure.getMessage(),null));
         });
 
         return updateGroupMutableLiveData;
@@ -140,18 +155,43 @@ public class GroupRepository implements IGroupMethods {
         List<GroupDto> groups = new ArrayList<>();
 
         for(int i =0; i < documents.size();i++){
+            ArrayList<Map<String,String>> membersDocs = (ArrayList<Map<String,String>> ) documents.get(i).getData().get("members");
+            List<UserInfoDto> members = mapToList(membersDocs);
             GroupDto groupDto = new GroupDto(
                     (String) documents.get(i).getData().get("groupId"),
                     (String) documents.get(i).getData().get("title"),
-                    (List<String>)documents.get(i).getData().get("memberNames"),
-                    (List<String>)documents.get(i).getData().get("members"),
+                    members,
+                    (List<String>)  documents.get(i).getData().get("memberIds"),
                     (String) documents.get(i).getData().get("owner"),
                     (Long) documents.get(i).getData().get("created")
-
             );
             groups.add(groupDto);
         }
         return groups;
+    }
+
+    private List<UserInfoDto> mapToList(ArrayList<Map<String,String>> membersDocs){
+        List<UserInfoDto> members = new ArrayList<>();
+
+        for(int i = 0; i< membersDocs.size();i++) {
+            String displayName = "";
+            String userId = "";
+            for (Map.Entry<String, String> entry : membersDocs.get(i).entrySet()) {
+
+                if (entry.getKey().equals("displayName")) {
+                    displayName = entry.getValue();
+                }
+                if (entry.getKey().equals("userId")) {
+                    userId = entry.getValue();
+                }
+            }
+            UserInfoDto friend = new UserInfoDto(
+                    displayName,
+                    userId
+            );
+            members.add(friend);
+        }
+        return members;
     }
 
 }

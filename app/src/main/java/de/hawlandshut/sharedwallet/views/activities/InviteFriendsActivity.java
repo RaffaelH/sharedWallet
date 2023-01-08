@@ -1,6 +1,5 @@
 package de.hawlandshut.sharedwallet.views.activities;
 
-import androidx.annotation.ColorInt;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,10 +14,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import de.hawlandshut.sharedwallet.R;
+import de.hawlandshut.sharedwallet.model.entities.UserInfoDto;
 import de.hawlandshut.sharedwallet.utils.Validators;
 import de.hawlandshut.sharedwallet.viewmodel.InviteViewModel;
 import de.hawlandshut.sharedwallet.viewmodel.UserViewModel;
-import de.hawlandshut.sharedwallet.views.components.GroupListAdapter;
 import de.hawlandshut.sharedwallet.views.components.LoadingDialog;
 import de.hawlandshut.sharedwallet.views.components.SearchFriendListAdapter;
 
@@ -88,9 +87,9 @@ public class InviteFriendsActivity extends AppCompatActivity implements View.OnC
         }
     }
 
-    public void inviteFriends(String friendsUserId){
+    public void inviteFriends(UserInfoDto friendsInfo){
         mLoadingDialog.showDialog();
-        mInviteViewModel.inviteFriend(friendsUserId).observe(this, invite -> {
+        mInviteViewModel.inviteFriend(friendsInfo).observe(this, invite -> {
             mLoadingDialog.closeDialog();
             switch(invite.status){
                 case SUCCESS:

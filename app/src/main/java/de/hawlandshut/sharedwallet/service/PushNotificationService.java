@@ -1,14 +1,14 @@
 package de.hawlandshut.sharedwallet.service;
 
-    import android.app.NotificationManager;
-    import android.app.PendingIntent;
-    import android.content.Context;
-    import android.content.Intent;
-    import android.util.Log;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 
-    import com.google.firebase.messaging.FirebaseMessagingService;
-    import com.google.firebase.messaging.RemoteMessage;
-    import de.hawlandshut.sharedwallet.views.activities.MainActivity;
+import com.google.firebase.messaging.FirebaseMessagingService;
+import com.google.firebase.messaging.RemoteMessage;
+import de.hawlandshut.sharedwallet.views.activities.MainActivity;
 
 /**
 * NOTE: There can only be one service in each app that receives FCM messages. If multiple
@@ -121,11 +121,8 @@ private void sendNotification(String messageBody) {
     PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
             PendingIntent.FLAG_IMMUTABLE);
 
-
-
     NotificationManager notificationManager =
             (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
 
 }
 }

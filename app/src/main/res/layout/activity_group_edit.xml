@@ -4,28 +4,28 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:orientation="vertical" >
+    android:paddingRight="16dp">
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        >
+        android:layout_marginEnd="8dp">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
+            android:orientation="horizontal">
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:layout_weight="2"
-                android:orientation="vertical"
-                >
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/tv_group_edit_title"
@@ -43,7 +43,7 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="10dp"
                     android:text=""
-                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
                 <TextView
                     android:id="@+id/tv_group_description"
@@ -52,21 +52,39 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="10dp"
                     android:text=""
-                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
             </LinearLayout>
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
 
 
-        <Button
-            android:id="@+id/btn_create_account"
-            android:layout_width="match_parent"
-            android:layout_marginTop="10dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="30dp"
-            android:text="@string/freunde_hinzuf_gen" />
+    <Button
+        android:id="@+id/btn_add_friend"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
 
+        android:text="@string/freunde_hinzuf_gen" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="30dp">
+        <TextView
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="Balance: ">
+        </TextView>
+        <TextView
+            android:id="@+id/tv_user_balance"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="0.00€">
+        </TextView>
+
+    </LinearLayout>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -75,21 +93,19 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_transaction_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-           />
+            android:layout_height="match_parent" />
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/flt_btn_new_group"
+            android:id="@+id/flt_btn_new_transaction"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="40dp"
+            android:layout_gravity="bottom"
             android:layout_marginStart="150dp"
             android:layout_marginEnd="20dp"
-            android:layout_gravity="bottom"
-            android:gravity="center_horizontal"
+            android:layout_marginBottom="40dp"
             android:contentDescription="@string/neue_transaktion_desc"
-            android:text="@string/neue_transaktion"
-            />
+            android:gravity="center_horizontal"
+            android:text="@string/neue_transaktion" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </LinearLayout>

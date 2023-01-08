@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 import java.util.List;
 
 import de.hawlandshut.sharedwallet.model.entities.GroupDto;
+import de.hawlandshut.sharedwallet.model.entities.UserInfoDto;
 import de.hawlandshut.sharedwallet.model.retro.Resource;
 import de.hawlandshut.sharedwallet.model.methods.IGroupMethods;
 import de.hawlandshut.sharedwallet.repository.GroupRepository;
@@ -41,8 +42,8 @@ public class GroupViewModel extends AndroidViewModel implements IGroupMethods {
     }
 
     @Override
-    public LiveData<Resource<String>> updateGroup(String groupId,GroupDto group) {
-        return groupRepository.updateGroup(groupId,group);
+    public LiveData<Resource<String>> updateMembers(String groupId, UserInfoDto newMember) {
+        return groupRepository.updateMembers(groupId,newMember);
     }
 
     @Override
@@ -56,9 +57,7 @@ public class GroupViewModel extends AndroidViewModel implements IGroupMethods {
     }
 
     public void resetAllGroups(){
-        System.out.println(allGroups);
         groupRepository.setGetAllGroupsMutableLiveData(new MutableLiveData<>());
-        System.out.println(allGroups);
         allGroups = groupRepository.getAllGroups();
     }
 

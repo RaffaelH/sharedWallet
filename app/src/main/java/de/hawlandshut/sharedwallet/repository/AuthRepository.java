@@ -61,7 +61,7 @@ public class AuthRepository implements IAuthMethods {
 
     @Override
     public MutableLiveData<Resource<String>> createAccount(String email, String password, String displayName){
-        Log.d("Auth","createAccount - Repository");
+
         MutableLiveData<Resource<String>> createAccountMutableLiveData = new MutableLiveData<>();
         firebaseAuth.createUserWithEmailAndPassword(email,password)
             .addOnSuccessListener(authTask -> {
@@ -76,7 +76,7 @@ public class AuthRepository implements IAuthMethods {
                     createAccountMutableLiveData.setValue(Resource.error(failure.getMessage(),null));
                 });
             }).addOnFailureListener(authFailure ->{
-            Log.d("Auth",authFailure.getMessage());
+
             createAccountMutableLiveData.setValue(Resource.error(authFailure.getMessage(),null));
         });
 
@@ -99,12 +99,10 @@ public class AuthRepository implements IAuthMethods {
                             new ArrayList<>()
                     );
                     userCollection.document(uid).set(user).addOnSuccessListener(success ->{
-                        Log.d("SetUser", "success");
-                    }).addOnFailureListener(failure -> {
-                        Log.d("SetUser", failure.getMessage());
+
                     });
                 }).addOnFailureListener(failure ->{
-                    Log.d("GetToken", failure.getMessage());
+
                 });
     }
 }

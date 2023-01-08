@@ -87,14 +87,12 @@ public class HomeActivity extends AppCompatActivity {
                 doStartFriendRequestActivity();
             }
         });
-
         return true;
     }
 
     public void reset(){
         mGroupViewModel.resetAllGroups();
         mGroupViewModel.removeListener();
-
         finish();
     }
 

@@ -24,11 +24,6 @@ public class NotificationTokenRepository implements INotificationTokenMethods {
     }
 
     @Override
-    public void onRefreshToken() {
-
-    }
-
-    @Override
     public LiveData<Resource<String>> getToken() {
 
         MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
@@ -47,8 +42,4 @@ public class NotificationTokenRepository implements INotificationTokenMethods {
         return liveData;
     }
 
-    @Override
-    public void onNewToken(@NonNull String token) {
-
-    }
 }

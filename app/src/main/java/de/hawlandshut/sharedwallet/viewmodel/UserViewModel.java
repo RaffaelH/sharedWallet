@@ -17,10 +17,12 @@ import de.hawlandshut.sharedwallet.repository.UserRepository;
 public class UserViewModel extends AndroidViewModel implements IUserMethods {
 
     private UserRepository userRepository;
+    private LiveData<Resource<UserDto>>  currentUser;
 
     public UserViewModel(@NonNull Application application) {
         super(application);
         userRepository = UserRepository.getInstance();
+        currentUser = userRepository.getSignedInUser();
     }
 
     @Override
@@ -31,5 +33,10 @@ public class UserViewModel extends AndroidViewModel implements IUserMethods {
     @Override
     public LiveData<Resource<List<UserInfoDto>>> searchUser(String displayName) {
         return userRepository.searchUser(displayName);
+    }
+
+    @Override
+    public LiveData<Resource<UserDto>> getSignedInUser() {
+        return currentUser;
     }
 }

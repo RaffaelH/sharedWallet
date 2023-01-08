@@ -84,7 +84,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                     mLoadingDialog.closeDialog();
             switch(signInResource.status){
                 case SUCCESS:
-                    Toast.makeText(getApplicationContext(), "You are signed in.", Toast.LENGTH_LONG).show();
+
                     finish();
                     return;
                 case ERROR:

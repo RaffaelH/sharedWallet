@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.List;
 
 import de.hawlandshut.sharedwallet.model.entities.FriendRequestDto;
+import de.hawlandshut.sharedwallet.model.entities.UserInfoDto;
 import de.hawlandshut.sharedwallet.model.methods.IInviteMethods;
 import de.hawlandshut.sharedwallet.model.retro.Resource;
 
@@ -52,9 +53,9 @@ public class InviteRepository implements IInviteMethods {
     }
 
     @Override
-    public LiveData<Resource<String>> inviteFriend(String friendsUserId) {
+    public LiveData<Resource<String>> inviteFriend(UserInfoDto friendInfo) {
         MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
-        invitesCollection.add(setFriendRequestDto(friendsUserId)).addOnSuccessListener(success -> {
+        invitesCollection.add(setFriendRequestDto(friendInfo)).addOnSuccessListener(success -> {
             liveData.setValue(Resource.success("success"));
         }).addOnFailureListener(failure -> {
             liveData.setValue(Resource.success(failure.getMessage()));
@@ -95,14 +96,15 @@ public class InviteRepository implements IInviteMethods {
         return liveData;
     }
 
-    private FriendRequestDto setFriendRequestDto(String friendsUserId){
+    private FriendRequestDto setFriendRequestDto(UserInfoDto friendsInfo){
        String currentUserId =  FirebaseAuth.getInstance().getCurrentUser().getUid();
        String currentUserName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
        FriendRequestDto friendRequestDto = new FriendRequestDto(
                "",
                currentUserId,
                currentUserName,
-               friendsUserId,
+               friendsInfo.getUserId(),
+               friendsInfo.getDisplayName(),
                false,
                false,
                new Date().getTime()
@@ -122,6 +124,7 @@ public class InviteRepository implements IInviteMethods {
                     (String) documents.get(i).getData().get("inviterId"),
                     (String) documents.get(i).getData().get("inviterName"),
                     (String) documents.get(i).getData().get("invitedId"),
+                    (String) documents.get(i).getData().get("invitedName"),
                     processed,
                     declined,
                     (Long) documents.get(i).getData().get("created")

@@ -40,7 +40,7 @@ public class SearchFriendListAdapter extends RecyclerView.Adapter<SearchFriendLi
             UserInfoDto user = users.get(position);
             holder.tvDisplayName.setText(user.getDisplayName());
             holder.cvCard.setOnClickListener(view -> {
-                ((InviteFriendsActivity)context).inviteFriends(users.get(position).getUserId());
+                ((InviteFriendsActivity)context).inviteFriends(users.get(position));
             });
         }
     }

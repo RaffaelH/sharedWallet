@@ -9,10 +9,16 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.auth.User;
 
+import org.w3c.dom.Document;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import de.hawlandshut.sharedwallet.model.entities.UserDto;
 import de.hawlandshut.sharedwallet.model.entities.UserInfoDto;
@@ -27,8 +33,11 @@ public class UserRepository implements IUserMethods {
     private final String USER_COLLECTION_NAME = "users";
     private final String USER_INFO_COLLECTION_NAME = "userinfo";
     private final String DISPLAY_NAME_FIELD = "displayName";
+    private final String USER_ID_FIELD = "userId";
     private CollectionReference userCollection = db.collection(USER_COLLECTION_NAME);
     private CollectionReference userInfoCollection = db.collection(USER_INFO_COLLECTION_NAME);
+    private MutableLiveData<Resource<UserDto>> currentUserLiveData = new MutableLiveData<>();
+    private ListenerRegistration userListener;
 
     public static UserRepository getInstance(){
         if(instance == null){
@@ -62,6 +71,21 @@ public class UserRepository implements IUserMethods {
         return liveData;
     }
 
+    @Override
+    public LiveData<Resource<UserDto>> getSignedInUser() {
+        userListener = userCollection
+                .whereEqualTo(USER_ID_FIELD,auth.getCurrentUser().getUid())
+                .addSnapshotListener(((value, error) -> {
+            if(error != null){
+                currentUserLiveData.setValue(Resource.error(error.getMessage(), null));
+            }
+            else if(value!= null && !value.isEmpty()){
+                currentUserLiveData.setValue(Resource.success(setUserDto(value.getDocuments())));
+            }
+        }));
+        return currentUserLiveData;
+    }
+
     private List<UserInfoDto> setUserInfoDto(List<DocumentSnapshot> documents){
         List<UserInfoDto> userInfoList = new ArrayList<>();
         for(int i =0; i< documents.size(); i++){
@@ -77,6 +101,42 @@ public class UserRepository implements IUserMethods {
             userInfoList = filterCurrentUser(userInfoList);
         }
         return userInfoList;
+    }
+
+    private UserDto setUserDto(List<DocumentSnapshot> documents){
+
+       ArrayList<Map<String,String>> friendDocs = (ArrayList<Map<String,String>> ) documents.get(0).getData().get("friends");
+       List<UserInfoDto> friendsList = new ArrayList<>();
+        Log.d("friendDocs: ", friendDocs.toString());
+
+        for(int i = 0; i< friendDocs.size();i++){
+            String displayName ="";
+            String userId = "";
+            for(Map.Entry<String,String> entry: friendDocs.get(i).entrySet()){
+
+                if(entry.getKey().equals("displayName")){
+                    displayName = entry.getValue();
+                }
+                if(entry.getKey().equals("userId")){
+                    userId = entry.getValue();
+                }
+            }
+            UserInfoDto friend = new UserInfoDto(
+                    displayName,
+                    userId
+            );
+            friendsList.add(friend);
+            Log.d("friendList: ", friendsList.toString());
+        }
+
+        UserDto user = new UserDto(
+                (String) documents.get(0).getData().get("userId"),
+                (String) documents.get(0).getData().get("email"),
+                (String) documents.get(0).getData().get("displayName"),
+                (String) documents.get(0).getData().get("token"),
+                friendsList
+        );
+        return user;
     }
 
     private List<UserInfoDto> filterCurrentUser(List<UserInfoDto> users){

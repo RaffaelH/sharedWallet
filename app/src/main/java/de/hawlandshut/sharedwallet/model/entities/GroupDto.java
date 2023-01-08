@@ -3,13 +3,16 @@ package de.hawlandshut.sharedwallet.model.entities;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.firestore.auth.User;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class GroupDto implements Parcelable {
     private String groupId;
     private String title;
-    private List<String> memberNames;
-    private List<String> members;
+    private List<UserInfoDto> members;
+    private List<String> memberIds;
     private String owner;
     private Long created;
 
@@ -22,11 +25,11 @@ public class GroupDto implements Parcelable {
         }
     };
 
-    public GroupDto(String groupId, String title, List<String> memberNames, List<String> memberId, String owner, Long  created) {
+    public GroupDto(String groupId, String title,List<UserInfoDto> members, List<String> memberIds, String owner, Long  created) {
         this.groupId = groupId;
         this.title = title;
-        this.memberNames = memberNames;
-        this.members = memberId;
+        this.members = members;
+        this.memberIds = memberIds;
         this.owner = owner;
         this.created = created;
     }
@@ -34,8 +37,9 @@ public class GroupDto implements Parcelable {
     private GroupDto(Parcel in) {
         groupId = in.readString();
         title = in.readString();
-        memberNames = in.readArrayList(ClassLoader.getSystemClassLoader());
-        members = in.readArrayList(ClassLoader.getSystemClassLoader());
+       members = new ArrayList<>();
+       in.readTypedList(members,UserInfoDto.CREATOR);
+        memberIds =  in.readArrayList(ClassLoader.getSystemClassLoader());
         owner = in.readString();
         created = in.readLong();
     }
@@ -49,8 +53,8 @@ public class GroupDto implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
             parcel.writeString(groupId);
             parcel.writeString(title);
-            parcel.writeList(memberNames);
-            parcel.writeList(members);
+            parcel.writeTypedList(members);
+            parcel.writeList(memberIds);
             parcel.writeString(owner);
             parcel.writeLong(created);
     }
@@ -63,13 +67,11 @@ public class GroupDto implements Parcelable {
         return title;
     }
 
-    public List<String> getMemberNames() {
-        return memberNames;
-    }
-
-    public List<String> getMembers() {
+    public List<UserInfoDto> getMembers() {
         return members;
     }
+
+    public List<String> getMemberIds(){return memberIds;}
 
     public String getOwner() {
         return owner;
@@ -78,6 +80,5 @@ public class GroupDto implements Parcelable {
     public Long getCreated() {
         return created;
     }
-
 
 }

@@ -8,25 +8,31 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.google.firebase.firestore.auth.User;
+
 import de.hawlandshut.sharedwallet.R;
+import de.hawlandshut.sharedwallet.model.entities.UserDto;
+import de.hawlandshut.sharedwallet.viewmodel.GroupViewModel;
 import de.hawlandshut.sharedwallet.viewmodel.InviteViewModel;
+import de.hawlandshut.sharedwallet.viewmodel.UserViewModel;
 import de.hawlandshut.sharedwallet.views.activities.CreateAccountActivity;
 import de.hawlandshut.sharedwallet.views.activities.InviteFriendsActivity;
+import de.hawlandshut.sharedwallet.views.components.FriendAdapter;
 
 public class FriendsFragment extends Fragment implements View.OnClickListener {
 
-    private InviteViewModel mFriendsViewModel;
+    private static final String TAG = "FriendsFragment";
     private Button mBtnInviteFriends;
-
-    public FriendsFragment(){
-        // Required empty public constructor
-    }
+    private UserViewModel mUserViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -37,8 +43,24 @@ public class FriendsFragment extends Fragment implements View.OnClickListener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mBtnInviteFriends = view.findViewById(R.id.flt_btn_invite_friends);
-        mFriendsViewModel = new ViewModelProvider(requireActivity()).get(InviteViewModel.class);
         mBtnInviteFriends.setOnClickListener(this);
+        mUserViewModel =  new ViewModelProvider(requireActivity()).get(UserViewModel.class);
+        RecyclerView recyclerView = getView().findViewById(R.id.rv_friend_list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        FriendAdapter adapter = new FriendAdapter();
+        recyclerView.setAdapter(adapter);
+
+        mUserViewModel.getSignedInUser().observe(getActivity(), result ->{
+            switch (result.status){
+                case SUCCESS:
+                    adapter.setFriends(result.data.getFriends());
+                    break;
+                case ERROR:
+                    Log.d(TAG,result.message);
+                    break;
+            }
+        });
+
     }
 
     @Override
@@ -57,16 +79,4 @@ public class FriendsFragment extends Fragment implements View.OnClickListener {
             return;
         }
     }
-
-    private void onShareClicked(){
-        Uri link = mFriendsViewModel.generateContentLink();
-
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_TEXT, link.toString());
-
-        startActivity(Intent.createChooser(intent, "Share Link"));
-
-    }
-
 }

@@ -40,9 +40,18 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.Grou
         {
             holder.cvCard.setBackgroundResource(R.color.white);
         }
+
+        StringBuffer stringBuffer = new StringBuffer();
+
         GroupDto groupInfo = groups.get(position);
+        for(int i =0; i < groupInfo.getMembers().size(); i++){
+
+            stringBuffer.append(groupInfo.getMembers().get(i).getDisplayName());
+            stringBuffer.append(" ");
+        }
+
         holder.tvTitle.setText(groupInfo.getTitle());
-        holder.tvMembers.setText(String.valueOf(groupInfo.getMemberNames()));
+        holder.tvMembers.setText(stringBuffer.toString());
         holder.currentGroup = groups.get(position);
     }
 

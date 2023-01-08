@@ -20,17 +20,9 @@ public class NotificationTokenViewModel extends AndroidViewModel implements INot
     }
 
     @Override
-    public void onRefreshToken() {
-
-    }
-
-    @Override
     public LiveData<Resource<String>> getToken() {
         return notificationTokenRepository.getToken();
     }
 
-    @Override
-    public void onNewToken(@NonNull String token) {
 
-    }
 }

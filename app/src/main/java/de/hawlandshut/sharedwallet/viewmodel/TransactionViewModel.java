@@ -18,8 +18,6 @@ public class TransactionViewModel extends AndroidViewModel implements ITransacti
     private TransactionRepository transactionRepository;
 
     public TransactionViewModel(@NonNull Application application) {
-
-
         super(application);
         transactionRepository = TransactionRepository.getInstance();
     }
@@ -32,6 +30,11 @@ public class TransactionViewModel extends AndroidViewModel implements ITransacti
     @Override
     public LiveData<Resource<TransactionDto>> getTransaction(String transactionId) {
         return null;
+    }
+
+    @Override
+    public LiveData<Resource<String>> addTransaction(TransactionDto transactionDto) {
+        return transactionRepository.addTransaction(transactionDto);
     }
 
     @Override

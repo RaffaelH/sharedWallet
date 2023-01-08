@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData;
 import java.util.List;
 
 import de.hawlandshut.sharedwallet.model.entities.GroupDto;
+import de.hawlandshut.sharedwallet.model.entities.UserInfoDto;
 import de.hawlandshut.sharedwallet.model.retro.Resource;
 
 public interface IGroupMethods {
@@ -15,7 +16,7 @@ public interface IGroupMethods {
 
     LiveData<Resource<String>> addGroup(GroupDto group);
 
-    LiveData<Resource<String>> updateGroup(String groupId, GroupDto group);
+    LiveData<Resource<String>> updateMembers(String groupId, UserInfoDto newMember);
 
     LiveData<Resource<String>> deleteGroup(String groupId);
 

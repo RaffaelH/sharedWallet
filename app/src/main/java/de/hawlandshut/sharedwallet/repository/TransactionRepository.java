@@ -61,6 +61,19 @@ public class TransactionRepository implements ITransactionMethods {
     }
 
     @Override
+    public LiveData<Resource<String>> addTransaction(TransactionDto transactionDto) {
+        MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
+
+        transactionCollection.add(transactionDto).addOnSuccessListener(success ->{
+            liveData.setValue(Resource.success("success"));
+        }).addOnFailureListener(failure -> {
+            liveData.setValue(Resource.error(failure.getMessage(),null));
+        });
+
+        return liveData;
+    }
+
+    @Override
     public LiveData<Resource<String>> deleteTransaction(String transactionId) {
         return null;
     }
@@ -80,8 +93,8 @@ public class TransactionRepository implements ITransactionMethods {
                     (String) documents.get(i).getData().get("description"),
                     (String) documents.get(i).getData().get("creditorId"),
                     (String) documents.get(i).getData().get("creditor"),
-                    (HashMap<String,Double>) documents.get(i).getData().get("debtors"),
-                    (double) documents.get(i).get("amount"),
+                    (List<String>) documents.get(i).getData().get("debtors"),
+                    (Double) documents.get(i).get("amount"),
                     (Long) documents.get(i).getData().get("created")
             );
             transactionList.add(transaction);

@@ -31,9 +31,6 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     private AuthViewModel mAuthViewModel;
     private GroupViewModel mGroupViewModel;
 
-    public AccountFragment() {
-    }
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -45,6 +42,10 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         mBtnSignOut.setOnClickListener(this);
         mAuthViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
         mGroupViewModel = new ViewModelProvider(requireActivity()).get(GroupViewModel.class);
+        mAuthViewModel.getCurrentFirebaseUser().observe(getActivity(), currentUser ->{
+            mTvDisplayName.setText(currentUser.getDisplayName());
+            mTvEmail.setText(currentUser.getEmail());
+        });
     }
 
     @Override
@@ -54,7 +55,6 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         return inflater.inflate(R.layout.fragment_account, container, false);
     }
 
-
     @Override
     public void onClick(View view) {
         switch(view.getId()){
@@ -63,9 +63,5 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
                 ((HomeActivity)getActivity()).reset();
                 return;
         }
-
-
     }
-
-
 }

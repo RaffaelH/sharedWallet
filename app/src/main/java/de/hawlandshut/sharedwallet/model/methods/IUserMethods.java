@@ -14,4 +14,6 @@ public interface IUserMethods {
 
     LiveData<Resource<List<UserInfoDto>>> searchUser(String displayName);
 
+    LiveData<Resource<UserDto>> getSignedInUser();
+
 }

@@ -30,8 +30,8 @@ public class InviteViewModel extends AndroidViewModel implements IInviteMethods 
     }
 
     @Override
-    public LiveData<Resource<String>> inviteFriend(String friendsUserId) {
-        return friendsRepository.inviteFriend(friendsUserId);
+    public LiveData<Resource<String>> inviteFriend(UserInfoDto friendsInfo) {
+        return friendsRepository.inviteFriend(friendsInfo);
     }
 
     @Override

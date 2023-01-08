@@ -1,6 +1,7 @@
 package de.hawlandshut.sharedwallet.model.entities;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class TransactionDto {
 
@@ -9,11 +10,11 @@ public class TransactionDto {
     private String description;
     private String creditorId;
     private String creditor;
-    private HashMap<String,Double> debtors;
-    private double amount;
+    private List<String> debtors;
+    private Double amount;
     private Long created;
 
-    public TransactionDto(String transactionId, String groupId,String description, String creditorId, String creditor, HashMap<String, Double> debtors, double amount, Long created) {
+    public TransactionDto(String transactionId, String groupId,String description, String creditorId, String creditor, List<String> debtors, Double amount, Long created) {
         this.transactionId = transactionId;
         this.groupId = groupId;
         this.description = description;
@@ -40,7 +41,7 @@ public class TransactionDto {
         return created;
     }
 
-    public HashMap<String, Double> getDebtors() {
+    public List<String> getDebtors() {
         return debtors;
     }
 

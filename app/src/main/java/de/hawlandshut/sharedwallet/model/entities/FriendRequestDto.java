@@ -76,6 +76,8 @@ public class FriendRequestDto implements Parcelable {
         return invitedId;
     }
 
+    public String getInvitedName(){return invitedName;}
+
     public boolean getProcessed() {
         return processed;
     }

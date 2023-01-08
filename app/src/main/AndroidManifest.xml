@@ -13,6 +13,20 @@
         android:theme="@style/Theme.SharedWallet"
         tools:targetApi="31">
         <activity
+            android:name=".views.activities.AddTransactionActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".views.activities.AddFriendToGroupActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".views.activities.FriendRequestActivity"
             android:exported="false">
             <meta-data
@@ -21,13 +35,6 @@
         </activity>
         <activity
             android:name=".views.activities.InviteFriendsActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".views.activities.CreateTransactionActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

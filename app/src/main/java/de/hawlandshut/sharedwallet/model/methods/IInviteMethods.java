@@ -14,7 +14,7 @@ public interface IInviteMethods {
 
     Uri generateContentLink();
 
-    LiveData<Resource<String>> inviteFriend(String friendsUserId);
+    LiveData<Resource<String>> inviteFriend(UserInfoDto friendsInfo);
 
     LiveData<Resource<List<FriendRequestDto>>> getALlFriendRequests();
 
