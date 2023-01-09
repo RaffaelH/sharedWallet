@@ -48,11 +48,11 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onStart() {
         super.onStart();
-        mAuthViewModel.getCurrentFirebaseUser().observe(this, currentUser ->{
-            if(currentUser != null){
+
+            if(mAuthViewModel.getCurrentFirebaseUser() != null){
                 finish();
             }
-        });
+
     }
 
 

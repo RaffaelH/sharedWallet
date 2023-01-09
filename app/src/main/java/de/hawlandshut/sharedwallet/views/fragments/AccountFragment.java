@@ -42,10 +42,10 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         mBtnSignOut.setOnClickListener(this);
         mAuthViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
         mGroupViewModel = new ViewModelProvider(requireActivity()).get(GroupViewModel.class);
-        mAuthViewModel.getCurrentFirebaseUser().observe(getActivity(), currentUser ->{
-            mTvDisplayName.setText(currentUser.getDisplayName());
-            mTvEmail.setText(currentUser.getEmail());
-        });
+
+            mTvDisplayName.setText( mAuthViewModel.getCurrentFirebaseUser().getDisplayName());
+            mTvEmail.setText( mAuthViewModel.getCurrentFirebaseUser().getEmail());
+
     }
 
     @Override

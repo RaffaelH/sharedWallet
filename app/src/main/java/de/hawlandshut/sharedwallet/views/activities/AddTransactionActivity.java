@@ -51,20 +51,19 @@ public class AddTransactionActivity extends AppCompatActivity implements View.On
         }
     }
 
-    private void addTransaction() {
 
-        mAuthViewModel.getCurrentFirebaseUser().observe(this, obs -> {
+    private void addTransaction() {
             List<String> debtors = mGroup.getMemberIds();
 
-            debtors.remove(obs.getUid());
+            debtors.remove( mAuthViewModel.getCurrentFirebaseUser().getUid());
             Log.d("addTransaction", String.valueOf(debtors.size()));
 
             TransactionDto transaction = new TransactionDto(
                     "",
                     mGroup.getGroupId(),
                     mEdtTransactionDescription.getText().toString(),
-                    obs.getUid(),
-                    obs.getDisplayName(),
+                    mAuthViewModel.getCurrentFirebaseUser().getUid(),
+                    mAuthViewModel.getCurrentFirebaseUser().getDisplayName(),
                     debtors,
                     Double.valueOf(mEdtAmount.getText().toString()),
                     new Date().getTime()
@@ -77,8 +76,5 @@ public class AddTransactionActivity extends AppCompatActivity implements View.On
                         Log.d("addTransaction", " "+ transactionTask.message);
                 }
             });
-        });
-
-
     }
 }

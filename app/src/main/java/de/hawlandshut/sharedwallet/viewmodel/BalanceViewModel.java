@@ -20,10 +20,14 @@ public class BalanceViewModel extends AndroidViewModel implements IBalanceMethod
         balanceRepository = BalanceRepository.getInstance();
     }
 
-
     @Override
     public LiveData<Resource<BalanceDto>> getBalance(String groupId) {
         return balanceRepository.getBalance(groupId);
+    }
+
+    @Override
+    public LiveData<Resource<String>> resetBalance(String groupId) {
+        return balanceRepository.resetBalance(groupId);
     }
 
     @Override

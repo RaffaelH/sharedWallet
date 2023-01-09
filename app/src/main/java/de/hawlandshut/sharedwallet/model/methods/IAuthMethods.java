@@ -10,7 +10,7 @@ public interface IAuthMethods {
 
    LiveData<Resource<String>> signIn(String email, String password);
 
-   LiveData<FirebaseUser> getCurrentFirebaseUser ();
+   FirebaseUser getCurrentFirebaseUser ();
 
    LiveData<Resource<String>> createAccount(String email, String password, String displayName);
 

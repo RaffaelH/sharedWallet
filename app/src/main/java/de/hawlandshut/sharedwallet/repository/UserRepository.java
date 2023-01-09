@@ -105,7 +105,7 @@ public class UserRepository implements IUserMethods {
 
     private UserDto setUserDto(List<DocumentSnapshot> documents){
 
-       ArrayList<Map<String,String>> friendDocs = (ArrayList<Map<String,String>> ) documents.get(0).getData().get("friends");
+       ArrayList<Map<String,String>> friendDocs = (ArrayList<Map<String,String>>) documents.get(0).getData().get("friends");
        List<UserInfoDto> friendsList = new ArrayList<>();
         Log.d("friendDocs: ", friendDocs.toString());
 
@@ -126,7 +126,6 @@ public class UserRepository implements IUserMethods {
                     userId
             );
             friendsList.add(friend);
-            Log.d("friendList: ", friendsList.toString());
         }
 
         UserDto user = new UserDto(

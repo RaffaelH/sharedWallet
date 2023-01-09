@@ -25,7 +25,7 @@ public class AuthViewModel extends AndroidViewModel implements IAuthMethods {
     }
 
     @Override
-    public LiveData<FirebaseUser> getCurrentFirebaseUser (){
+    public FirebaseUser getCurrentFirebaseUser (){
         return authRepository.getCurrentFirebaseUser();
     }
 

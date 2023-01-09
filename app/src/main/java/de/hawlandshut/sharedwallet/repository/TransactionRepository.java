@@ -1,5 +1,7 @@
 package de.hawlandshut.sharedwallet.repository;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -81,6 +83,11 @@ public class TransactionRepository implements ITransactionMethods {
     @Override
     public void removeListener() {
         allTransactionsListener.remove();
+        getAllTransactions = new MutableLiveData<>();
+    }
+
+    public void setTransactions(MutableLiveData<Resource<List<TransactionDto>>> newTransactions){
+        getAllTransactions = newTransactions;
     }
 
     private List<TransactionDto> setTransactionList(List<DocumentSnapshot> documents){

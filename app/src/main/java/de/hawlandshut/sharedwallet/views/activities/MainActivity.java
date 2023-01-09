@@ -13,6 +13,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.google.firebase.auth.FirebaseUser;
+
 import de.hawlandshut.sharedwallet.R;
 import de.hawlandshut.sharedwallet.viewmodel.AuthViewModel;
 
@@ -33,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        mAuthViewModel.getCurrentFirebaseUser().observe(this, currentFirebaseUser -> {
+       FirebaseUser currentFirebaseUser =  mAuthViewModel.getCurrentFirebaseUser();
             if (currentFirebaseUser == null) {
                 Intent intent = new Intent(getApplication(), SignInActivity.class);
                 startActivity(intent);
@@ -41,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplication(), HomeActivity.class);
                 startActivity(intent);
             }
-        });
+
     }
 
 

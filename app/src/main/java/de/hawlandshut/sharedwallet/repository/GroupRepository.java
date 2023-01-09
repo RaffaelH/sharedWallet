@@ -111,7 +111,6 @@ public class GroupRepository implements IGroupMethods {
     @Override
     public LiveData<Resource<String>> updateMembers(String groupId,UserInfoDto newMember) {
         MutableLiveData<Resource<String>> updateGroupMutableLiveData = new MutableLiveData<>();
-
         Task<QuerySnapshot> query = groupsCollection.whereEqualTo(GROUP_ID_FIELD,groupId).get();
 
         query.addOnSuccessListener(success -> {
@@ -144,6 +143,7 @@ public class GroupRepository implements IGroupMethods {
     public void removeListener(){
         if(allGroupsListener != null){
             allGroupsListener.remove();
+
         }
     }
 

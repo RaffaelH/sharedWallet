@@ -52,11 +52,10 @@ public class AuthRepository implements IAuthMethods {
     }
 
     @Override
-    public MutableLiveData<FirebaseUser> getCurrentFirebaseUser(){
+    public FirebaseUser getCurrentFirebaseUser(){
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-        MutableLiveData<FirebaseUser> firebaseUserLiveData= new MutableLiveData<>();
-        firebaseUserLiveData.setValue(firebaseUser);
-        return firebaseUserLiveData;
+
+        return firebaseUser;
     }
 
     @Override

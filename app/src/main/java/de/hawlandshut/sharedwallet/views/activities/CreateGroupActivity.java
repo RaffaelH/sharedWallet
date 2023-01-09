@@ -73,8 +73,8 @@ public class CreateGroupActivity extends AppCompatActivity implements View.OnCli
 
         List<UserInfoDto> members = new ArrayList<>();
         UserInfoDto member = new UserInfoDto(
-                mAuthViewModel.getCurrentFirebaseUser().getValue().getDisplayName(),
-                mAuthViewModel.getCurrentFirebaseUser().getValue().getUid()
+                mAuthViewModel.getCurrentFirebaseUser().getDisplayName(),
+                mAuthViewModel.getCurrentFirebaseUser().getUid()
         );
         members.add(member);
 
@@ -82,8 +82,8 @@ public class CreateGroupActivity extends AppCompatActivity implements View.OnCli
                 "",
                 mEdtGroupTitle.getText().toString(),
                 members,
-                Arrays.asList(new String[]{mAuthViewModel.getCurrentFirebaseUser().getValue().getUid()}),
-                mAuthViewModel.getCurrentFirebaseUser().getValue().getUid(),
+                Arrays.asList(new String[]{mAuthViewModel.getCurrentFirebaseUser().getUid()}),
+                mAuthViewModel.getCurrentFirebaseUser().getUid(),
                 new Date().getTime()
         );
         return groupDto;

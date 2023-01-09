@@ -1,13 +1,16 @@
 package de.hawlandshut.sharedwallet.views.activities;
 
+import androidx.annotation.ColorInt;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.provider.CalendarContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -20,6 +23,7 @@ import java.util.List;
 import de.hawlandshut.sharedwallet.R;
 import de.hawlandshut.sharedwallet.model.entities.GroupDto;
 import de.hawlandshut.sharedwallet.model.entities.UserInfoDto;
+import de.hawlandshut.sharedwallet.viewmodel.AuthViewModel;
 import de.hawlandshut.sharedwallet.viewmodel.BalanceViewModel;
 import de.hawlandshut.sharedwallet.viewmodel.GroupViewModel;
 import de.hawlandshut.sharedwallet.viewmodel.TransactionViewModel;
@@ -36,11 +40,13 @@ public class GroupEditActivity extends AppCompatActivity implements View.OnClick
     private TextView mTvUserBalance;
     private Button mBtnAddFriend;
     private Button mBtnAddTransaction;
+    private Button mBtnResetBalance;
     private GroupDto mGroup;
     private GroupViewModel mGroupViewModel;
     private TransactionViewModel mTransactionViewModel;
     private BalanceViewModel mBalanceViewModel;
-    private TransactionListAdapter adapter = new TransactionListAdapter();
+    private AuthViewModel mAuthViewModel;
+    private TransactionListAdapter adapter = new TransactionListAdapter(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,10 +58,13 @@ public class GroupEditActivity extends AppCompatActivity implements View.OnClick
         mTvUserBalance = findViewById(R.id.tv_user_balance);
         mBtnAddFriend = findViewById(R.id.btn_add_friend);
         mBtnAddTransaction = findViewById(R.id.flt_btn_new_transaction);
+        mBtnResetBalance = findViewById(R.id.btn_reset_balance);
+        mBtnResetBalance.setOnClickListener(this);
         mBtnAddTransaction.setOnClickListener(this);
         mBtnAddFriend.setOnClickListener(this);
         mGroup = getIntent().getParcelableExtra("groupDto");
         mGroupViewModel = new ViewModelProvider(this).get(GroupViewModel.class);
+        mAuthViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
         mTransactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
         mBalanceViewModel = new ViewModelProvider(this).get(BalanceViewModel.class);
         mTvTitle.setText(mGroup.getTitle());
@@ -68,7 +77,14 @@ public class GroupEditActivity extends AppCompatActivity implements View.OnClick
         mBalanceViewModel.getBalance(mGroup.getGroupId()).observe(this, balance ->{
             switch (balance.status){
                 case SUCCESS:
-                    mTvUserBalance.setText(balance.data.getAmount().toString());
+                     float amount = Math.round( balance.data.getAmount().floatValue() *100)/100;
+                    String userBalance = String.valueOf(amount) + " €";
+                    mTvUserBalance.setText(userBalance);
+                    if(balance.data.getAmount().longValue() >=0){
+                        mTvUserBalance.setTextColor(getColor(R.color.green));
+                    }else{
+                        mTvUserBalance.setTextColor(getColor(R.color.red));
+                    }
             }
         });
 
@@ -96,6 +112,7 @@ public class GroupEditActivity extends AppCompatActivity implements View.OnClick
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Log.d("GroupEdit: ","Destroy called");
         mTransactionViewModel.removeListener();
         mBalanceViewModel.removeListener();
     }
@@ -114,7 +131,14 @@ public class GroupEditActivity extends AppCompatActivity implements View.OnClick
                     startActivity(new Intent(this,AddTransactionActivity.class)
                             .putExtra("groupDto", (Parcelable) mGroup));
                 }
+                break;
+            case R.id.btn_reset_balance:
+                resetBalance(mGroup.getGroupId());
+                break;
         }
+    }
+    public String getCurrentUserId(){
+        return mAuthViewModel.getCurrentFirebaseUser().getUid();
     }
 
     private String setMembers (List<UserInfoDto> members){
@@ -124,6 +148,18 @@ public class GroupEditActivity extends AppCompatActivity implements View.OnClick
             stringBuffer.append(" ");
         }
         return stringBuffer.toString();
+    }
+
+    private void resetBalance(String groupId){
+        mBalanceViewModel.resetBalance(groupId).observe(this,result ->{
+            switch (result.status){
+                case SUCCESS:
+                    Log.d("resetBalance",result.data);
+                    return;
+                case ERROR:
+                    Log.d("resetBalance","Error reseting Balance");
+            }
+        });
     }
 
 }

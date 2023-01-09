@@ -5,6 +5,7 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ public class TransactionViewModel extends AndroidViewModel implements ITransacti
 
     private TransactionRepository transactionRepository;
 
+
     public TransactionViewModel(@NonNull Application application) {
         super(application);
         transactionRepository = TransactionRepository.getInstance();
@@ -24,7 +26,8 @@ public class TransactionViewModel extends AndroidViewModel implements ITransacti
 
     @Override
     public LiveData<Resource<List<TransactionDto>>> getAllTransactions(String groupId) {
-        return transactionRepository.getAllTransactions(groupId);
+
+        return  transactionRepository.getAllTransactions(groupId);
     }
 
     @Override
@@ -44,6 +47,7 @@ public class TransactionViewModel extends AndroidViewModel implements ITransacti
 
     @Override
     public void removeListener() {
-
+        transactionRepository.removeListener();
+        transactionRepository.setTransactions(new MutableLiveData<>());
     }
 }

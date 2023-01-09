@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.dynamiclinks.DynamicLink;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
@@ -13,6 +14,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -55,11 +57,30 @@ public class InviteRepository implements IInviteMethods {
     @Override
     public LiveData<Resource<String>> inviteFriend(UserInfoDto friendInfo) {
         MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
-        invitesCollection.add(setFriendRequestDto(friendInfo)).addOnSuccessListener(success -> {
-            liveData.setValue(Resource.success("success"));
-        }).addOnFailureListener(failure -> {
-            liveData.setValue(Resource.success(failure.getMessage()));
+        Task<QuerySnapshot> query = invitesCollection.whereEqualTo(USER_ID_FIELD, friendInfo.getUserId()).get();
+
+        query.addOnSuccessListener(querySuccess ->{
+
+            if(querySuccess.isEmpty()){
+                invitesCollection.add(setFriendRequestDto(friendInfo)).addOnSuccessListener(success -> {
+                    liveData.setValue(Resource.success("success"));
+                }).addOnFailureListener(failure -> {
+                    liveData.setValue(Resource.error(failure.getMessage(),null));
+                }).addOnCanceledListener(()->{
+                    liveData.setValue(Resource.error("Invite canceled",null));
+                });
+            }
+            else{
+                liveData.setValue(Resource.error("Es existiert bereits eine Einladung.",null));
+            }
+
+        }).addOnCanceledListener(() ->{
+            liveData.setValue(Resource.error("Invite canceled",null));
+
+        }).addOnFailureListener(queryFailed ->{
+            liveData.setValue(Resource.error(queryFailed.getMessage(),null));
         });
+
         return liveData;
     }
 

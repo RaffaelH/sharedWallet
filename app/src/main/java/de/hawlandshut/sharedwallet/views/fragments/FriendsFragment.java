@@ -60,7 +60,6 @@ public class FriendsFragment extends Fragment implements View.OnClickListener {
                     break;
             }
         });
-
     }
 
     @Override

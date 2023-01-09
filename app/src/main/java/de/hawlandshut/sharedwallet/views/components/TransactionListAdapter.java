@@ -1,5 +1,6 @@
 package de.hawlandshut.sharedwallet.views.components;
 
+import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,19 +9,31 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.auth.api.Auth;
+
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import de.hawlandshut.sharedwallet.R;
 import de.hawlandshut.sharedwallet.model.entities.TransactionDto;
-import de.hawlandshut.sharedwallet.model.entities.UserInfoDto;
+
+import de.hawlandshut.sharedwallet.views.activities.GroupEditActivity;
 
 public class TransactionListAdapter extends RecyclerView.Adapter<TransactionListAdapter.TransactionHolder> {
 
     private List<TransactionDto> transactions = new ArrayList<>();
+    private final Locale LOCAL = new Locale("de", "DE");
+    private Context context;
+
+    public TransactionListAdapter(Context context){
+        this.context = context;
+    }
 
     @NonNull
     @Override
@@ -31,13 +44,29 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
 
     @Override
     public void onBindViewHolder(@NonNull TransactionHolder holder, int position) {
-       TransactionDto transactionDto = transactions.get(position);
-       Log.d("Adapter",transactionDto.getCreated().toString());
-       String created= new Date(transactionDto.getCreated().longValue()).toLocaleString();
-       holder.tvCreated.setText(created);
-       holder.tvCreditor.setText(transactionDto.getCreditor());
-       holder.tvAmount.setText(String.valueOf(transactionDto.getAmount()));
-       holder.tvTitle.setText(transactionDto.getDescription());
+        TransactionDto transactionDto = transactions.get(position);
+        String uid = ((GroupEditActivity)context).getCurrentUserId();
+        Date date = new Date(transactionDto.getCreated().longValue());
+        DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT, LOCAL);
+        String created = dateFormat.format(date);
+        holder.tvCreated.setText(created);
+        holder.tvCreditor.setText(transactionDto.getCreditor());
+        String rounded = String.valueOf(Math.round(transactionDto.getAmount() *100)/100) +" €";
+        holder.tvAmount.setText(rounded);
+        holder.tvTitle.setText(transactionDto.getDescription());
+        if(transactionDto.getCreditorId().equals(uid)){
+            holder.tvCreditText.setText("Du bekommst :");
+            double amount = transactionDto.getAmount() - transactionDto.getAmount() / (transactionDto.getDebtors().size() +1);
+            String credit = String.valueOf(Math.round(amount *100)/100) +" €";
+            holder.tvCredit.setText(credit);
+            holder.tvCredit.setTextColor(((GroupEditActivity)context).getColor(R.color.green));
+        }else{
+            holder.tvCreditText.setText("Du schuldest :");
+            double amount = transactionDto.getAmount() / (transactionDto.getDebtors().size() +1);
+            String credit = String.valueOf(Math.round(amount *100)/100) +" €";
+            holder.tvCredit.setText(credit);
+            holder.tvCredit.setTextColor(((GroupEditActivity)context).getColor(R.color.red));
+        }
     }
 
     @Override
@@ -55,6 +84,8 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
         private TextView tvAmount;
         private TextView tvCreditor;
         private TextView tvTitle;
+        private TextView tvCredit;
+        private TextView tvCreditText;
 
         public TransactionHolder(View itemView) {
             super(itemView);
@@ -62,6 +93,8 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
             tvAmount = itemView.findViewById(R.id.tv_amount);
             tvCreditor = itemView.findViewById(R.id.tv_creditor);
             tvTitle = itemView.findViewById(R.id.tv_title);
+            tvCredit = itemView.findViewById(R.id.tv_credit);
+            tvCreditText = itemView.findViewById(R.id.tv_credit_text);
         }
     }
 }

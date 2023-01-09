@@ -9,5 +9,7 @@ public interface IBalanceMethods {
 
     LiveData<Resource<BalanceDto>> getBalance(String groupId);
 
+    LiveData<Resource<String>> resetBalance(String groupId);
+
     void removeListener();
 }
