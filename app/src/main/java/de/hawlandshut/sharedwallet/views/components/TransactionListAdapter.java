@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.auth.api.Auth;
 
 import java.text.DateFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -30,6 +31,7 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
     private List<TransactionDto> transactions = new ArrayList<>();
     private final Locale LOCAL = new Locale("de", "DE");
     private Context context;
+    private NumberFormat formatter = NumberFormat.getCurrencyInstance(LOCAL);
 
     public TransactionListAdapter(Context context){
         this.context = context;
@@ -51,19 +53,19 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
         String created = dateFormat.format(date);
         holder.tvCreated.setText(created);
         holder.tvCreditor.setText(transactionDto.getCreditor());
-        String rounded = String.valueOf(Math.round(transactionDto.getAmount() *100)/100) +" €";
+        String rounded = formatter.format(transactionDto.getAmount());
         holder.tvAmount.setText(rounded);
         holder.tvTitle.setText(transactionDto.getDescription());
         if(transactionDto.getCreditorId().equals(uid)){
             holder.tvCreditText.setText("Du bekommst :");
             double amount = transactionDto.getAmount() - transactionDto.getAmount() / (transactionDto.getDebtors().size() +1);
-            String credit = String.valueOf(Math.round(amount *100)/100) +" €";
+            String credit = formatter.format(amount);
             holder.tvCredit.setText(credit);
             holder.tvCredit.setTextColor(((GroupEditActivity)context).getColor(R.color.green));
         }else{
             holder.tvCreditText.setText("Du schuldest :");
             double amount = transactionDto.getAmount() / (transactionDto.getDebtors().size() +1);
-            String credit = String.valueOf(Math.round(amount *100)/100) +" €";
+            String credit = formatter.format(amount);
             holder.tvCredit.setText(credit);
             holder.tvCredit.setTextColor(((GroupEditActivity)context).getColor(R.color.red));
         }

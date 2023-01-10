@@ -47,7 +47,9 @@ public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.Grou
         for(int i =0; i < groupInfo.getMembers().size(); i++){
 
             stringBuffer.append(groupInfo.getMembers().get(i).getDisplayName());
-            stringBuffer.append(" ");
+            if(i != groupInfo.getMembers().size()-1){
+                stringBuffer.append(", ");
+            }
         }
 
         holder.tvTitle.setText(groupInfo.getTitle());

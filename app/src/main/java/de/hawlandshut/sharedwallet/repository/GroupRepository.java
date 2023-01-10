@@ -101,6 +101,7 @@ public class GroupRepository implements IGroupMethods {
     public LiveData<Resource<String>> addGroup(GroupDto group) {
         MutableLiveData<Resource<String>> addGroupMutableLiveData = new MutableLiveData<>();
         groupsCollection.add(group).addOnSuccessListener(addGroupSuccess -> {
+            addGroupSuccess.update("groupId",addGroupSuccess.getId());
             addGroupMutableLiveData.setValue(Resource.success("success"));
         }).addOnFailureListener( addGroupFailure -> {
             addGroupMutableLiveData.setValue(Resource.error(addGroupFailure.getMessage(),null));
@@ -112,7 +113,6 @@ public class GroupRepository implements IGroupMethods {
     public LiveData<Resource<String>> updateMembers(String groupId,UserInfoDto newMember) {
         MutableLiveData<Resource<String>> updateGroupMutableLiveData = new MutableLiveData<>();
         Task<QuerySnapshot> query = groupsCollection.whereEqualTo(GROUP_ID_FIELD,groupId).get();
-
         query.addOnSuccessListener(success -> {
             success.getDocuments().get(0).getReference().update("members",
                     FieldValue.arrayUnion(newMember),"memberIds",FieldValue.arrayUnion(newMember.getUserId())).addOnSuccessListener(updateSuccess ->{

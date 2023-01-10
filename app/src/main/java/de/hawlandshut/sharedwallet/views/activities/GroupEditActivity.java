@@ -17,8 +17,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.NumberFormat;
 import java.time.Duration;
 import java.util.List;
+import java.util.Locale;
 
 import de.hawlandshut.sharedwallet.R;
 import de.hawlandshut.sharedwallet.model.entities.GroupDto;
@@ -46,6 +48,8 @@ public class GroupEditActivity extends AppCompatActivity implements View.OnClick
     private TransactionViewModel mTransactionViewModel;
     private BalanceViewModel mBalanceViewModel;
     private AuthViewModel mAuthViewModel;
+    private final Locale LOCAL = new Locale("de", "DE");
+    private NumberFormat formatter = NumberFormat.getCurrencyInstance(LOCAL);
     private TransactionListAdapter adapter = new TransactionListAdapter(this);
 
     @Override
@@ -73,14 +77,13 @@ public class GroupEditActivity extends AppCompatActivity implements View.OnClick
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
-
+        mTvUserBalance.setTextColor(getColor(R.color.green));
         mBalanceViewModel.getBalance(mGroup.getGroupId()).observe(this, balance ->{
             switch (balance.status){
                 case SUCCESS:
-                     float amount = Math.round( balance.data.getAmount().floatValue() *100)/100;
-                    String userBalance = String.valueOf(amount) + " €";
+                    String userBalance = formatter.format(balance.data.getAmount());
                     mTvUserBalance.setText(userBalance);
-                    if(balance.data.getAmount().longValue() >=0){
+                    if(balance.data.getAmount().longValue() >=0.00){
                         mTvUserBalance.setTextColor(getColor(R.color.green));
                     }else{
                         mTvUserBalance.setTextColor(getColor(R.color.red));
@@ -94,7 +97,6 @@ public class GroupEditActivity extends AppCompatActivity implements View.OnClick
                     adapter.setTransactions(transactions.data);
             }
         });
-
     }
 
     @Override
@@ -145,7 +147,9 @@ public class GroupEditActivity extends AppCompatActivity implements View.OnClick
         StringBuffer stringBuffer = new StringBuffer();
         for (int i = 0; i < members.size(); i++) {
             stringBuffer.append(members.get(i).getDisplayName());
-            stringBuffer.append(" ");
+            if(i != members.size()-1){
+                stringBuffer.append(", ");
+            }
         }
         return stringBuffer.toString();
     }

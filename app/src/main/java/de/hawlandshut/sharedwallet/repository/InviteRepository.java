@@ -31,12 +31,14 @@ public class InviteRepository implements IInviteMethods {
     private final Uri BASE_URL = Uri.parse("https://sharedwallet.page.link/app-install");
     private final String DOMAIN = "https://sharedwallet.page.link";
     private final String INVITES_COLLECTION_NAME = "invites";
-    private final String USER_ID_FIELD="invitedId";
+    private final String INVITED_ID_FIELD = "invitedId";
+    private final String INVITER_ID_FIELD = "inviterId";
+    private final String PROCESSED_FIELD = "processed";
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference invitesCollection = db.collection(INVITES_COLLECTION_NAME);
 
-    public static InviteRepository getInstance(){
-        if(instance == null){
+    public static InviteRepository getInstance() {
+        if (instance == null) {
             instance = new InviteRepository();
         }
         return instance;
@@ -57,28 +59,36 @@ public class InviteRepository implements IInviteMethods {
     @Override
     public LiveData<Resource<String>> inviteFriend(UserInfoDto friendInfo) {
         MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
-        Task<QuerySnapshot> query = invitesCollection.whereEqualTo(USER_ID_FIELD, friendInfo.getUserId()).get();
-
-        query.addOnSuccessListener(querySuccess ->{
-
-            if(querySuccess.isEmpty()){
-                invitesCollection.add(setFriendRequestDto(friendInfo)).addOnSuccessListener(success -> {
-                    liveData.setValue(Resource.success("success"));
-                }).addOnFailureListener(failure -> {
-                    liveData.setValue(Resource.error(failure.getMessage(),null));
-                }).addOnCanceledListener(()->{
-                    liveData.setValue(Resource.error("Invite canceled",null));
+        Task<QuerySnapshot> friendQuery = invitesCollection.whereEqualTo(INVITED_ID_FIELD, friendInfo.getUserId()).whereEqualTo(INVITER_ID_FIELD, FirebaseAuth.getInstance().getCurrentUser().getUid()).get();
+        Task<QuerySnapshot> selfQuery = invitesCollection.whereEqualTo(INVITER_ID_FIELD, friendInfo.getUserId()).whereEqualTo(INVITED_ID_FIELD, FirebaseAuth.getInstance().getCurrentUser().getUid()).get();
+        friendQuery.addOnSuccessListener(querySuccess -> {
+            if (querySuccess.isEmpty()) {
+                selfQuery.addOnSuccessListener(selfQuerySuccess -> {
+                    if (selfQuerySuccess.isEmpty()) {
+                        invitesCollection.add(setFriendRequestDto(friendInfo)).addOnSuccessListener(success -> {
+                            liveData.setValue(Resource.success("success"));
+                        }).addOnFailureListener(failure -> {
+                            liveData.setValue(Resource.error(failure.getMessage(), null));
+                        }).addOnCanceledListener(() -> {
+                            liveData.setValue(Resource.error("Invite canceled", null));
+                        });
+                    } else {
+                        liveData.setValue(Resource.error("Es existiert bereits eine Einladung.", null));
+                    }
+                }).addOnFailureListener(selfQueryFailed -> {
+                    liveData.setValue(Resource.error(selfQueryFailed.getMessage(), null));
+                }).addOnCanceledListener(() -> {
+                    liveData.setValue(Resource.error("Invite canceled", null));
                 });
-            }
-            else{
-                liveData.setValue(Resource.error("Es existiert bereits eine Einladung.",null));
+            } else {
+                liveData.setValue(Resource.error("Es existiert bereits eine Einladung.", null));
             }
 
-        }).addOnCanceledListener(() ->{
-            liveData.setValue(Resource.error("Invite canceled",null));
+        }).addOnCanceledListener(() -> {
+            liveData.setValue(Resource.error("Invite canceled", null));
 
-        }).addOnFailureListener(queryFailed ->{
-            liveData.setValue(Resource.error(queryFailed.getMessage(),null));
+        }).addOnFailureListener(queryFailed -> {
+            liveData.setValue(Resource.error(queryFailed.getMessage(), null));
         });
 
         return liveData;
@@ -87,20 +97,19 @@ public class InviteRepository implements IInviteMethods {
     @Override
     public LiveData<Resource<List<FriendRequestDto>>> getALlFriendRequests() {
         MutableLiveData<Resource<List<FriendRequestDto>>> liveData = new MutableLiveData<>();
-        invitesCollection.whereEqualTo(USER_ID_FIELD,FirebaseAuth.getInstance().getCurrentUser().getUid()).addSnapshotListener((value, error) -> {
-            if(error != null){
-                liveData.setValue(Resource.error(error.getMessage(), null));
-            }
-            if(value != null && !value.isEmpty()){
-                List<DocumentSnapshot> documents = value.getDocuments();
-                List<FriendRequestDto> friendRequestDtoList = toFriendRequestDtoList(documents);
-                friendRequestDtoList = filterProcessedRequests(friendRequestDtoList);
-                liveData.setValue(Resource.success(friendRequestDtoList));
-            }
-            else{
-                liveData.setValue(Resource.error("keine Dokumente", null));
-            }
-        });
+        invitesCollection.whereEqualTo(INVITED_ID_FIELD, FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .whereEqualTo(PROCESSED_FIELD, false).addSnapshotListener((value, error) -> {
+                    if (error != null) {
+                        liveData.setValue(Resource.error(error.getMessage(), null));
+                    }
+                    if (value != null && !value.isEmpty()) {
+                        List<DocumentSnapshot> documents = value.getDocuments();
+                        List<FriendRequestDto> friendRequestDtoList = toFriendRequestDtoList(documents);
+                        liveData.setValue(Resource.success(friendRequestDtoList));
+                    } else {
+                        liveData.setValue(Resource.error("keine Dokumente", null));
+                    }
+                });
         return liveData;
     }
 
@@ -108,37 +117,37 @@ public class InviteRepository implements IInviteMethods {
     public LiveData<Resource<String>> updateFriendRequest(FriendRequestDto friendRequestDto) {
         MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
         DocumentReference dbRef = invitesCollection.document(friendRequestDto.getRequestId());
-        dbRef.update("declined",friendRequestDto.getDeclined(),"processed",true)
-                .addOnSuccessListener(success ->{
-            liveData.setValue(Resource.success("success"));
-        }).addOnFailureListener(failure ->{
-            liveData.setValue(Resource.error(failure.getMessage(),null));
-        });
+        dbRef.update("declined", friendRequestDto.getDeclined(), "processed", true)
+                .addOnSuccessListener(success -> {
+                    liveData.setValue(Resource.success("success"));
+                }).addOnFailureListener(failure -> {
+                    liveData.setValue(Resource.error(failure.getMessage(), null));
+                });
         return liveData;
     }
 
-    private FriendRequestDto setFriendRequestDto(UserInfoDto friendsInfo){
-       String currentUserId =  FirebaseAuth.getInstance().getCurrentUser().getUid();
-       String currentUserName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
-       FriendRequestDto friendRequestDto = new FriendRequestDto(
-               "",
-               currentUserId,
-               currentUserName,
-               friendsInfo.getUserId(),
-               friendsInfo.getDisplayName(),
-               false,
-               false,
-               new Date().getTime()
+    private FriendRequestDto setFriendRequestDto(UserInfoDto friendsInfo) {
+        String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        String currentUserName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+        FriendRequestDto friendRequestDto = new FriendRequestDto(
+                "",
+                currentUserId,
+                currentUserName,
+                friendsInfo.getUserId(),
+                friendsInfo.getDisplayName(),
+                false,
+                false,
+                new Date().getTime()
         );
         return friendRequestDto;
     }
 
-    private List<FriendRequestDto> toFriendRequestDtoList(  List<DocumentSnapshot> documents){
+    private List<FriendRequestDto> toFriendRequestDtoList(List<DocumentSnapshot> documents) {
         List<FriendRequestDto> requests = new ArrayList<>();
 
-        for(int i = 0; i < documents.size(); i++){
-            Boolean processed = (Boolean)documents.get(i).getData().get("processed");
-            Boolean declined = (Boolean)documents.get(i).getData().get("declined");
+        for (int i = 0; i < documents.size(); i++) {
+            Boolean processed = (Boolean) documents.get(i).getData().get("processed");
+            Boolean declined = (Boolean) documents.get(i).getData().get("declined");
 
             FriendRequestDto request = new FriendRequestDto(
                     (String) documents.get(i).getData().get("requestId"),
@@ -154,17 +163,6 @@ public class InviteRepository implements IInviteMethods {
         }
         return requests;
     }
-
-    private  List<FriendRequestDto> filterProcessedRequests( List<FriendRequestDto> requests){
-
-        List<FriendRequestDto>  filteredRequests;
-        for(int i=0; i<requests.size();i++){
-            if(requests.get(i).getProcessed()){
-                requests.remove(requests.get(i));
-            }
-        }
-        filteredRequests = requests;
-
-        return filteredRequests;
-    }
 }
+
+
