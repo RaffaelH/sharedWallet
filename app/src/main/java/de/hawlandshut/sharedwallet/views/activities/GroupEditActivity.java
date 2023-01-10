@@ -95,6 +95,7 @@ public class GroupEditActivity extends AppCompatActivity implements View.OnClick
             switch(transactions.status){
                 case SUCCESS:
                     adapter.setTransactions(transactions.data);
+                    return;
             }
         });
     }
@@ -107,6 +108,8 @@ public class GroupEditActivity extends AppCompatActivity implements View.OnClick
                 case SUCCESS:
                     mGroup = result.data;
                     mTvMembers.setText(setMembers(mGroup.getMembers()));
+                    return;
+
             }
         });
     }
@@ -162,6 +165,7 @@ public class GroupEditActivity extends AppCompatActivity implements View.OnClick
                     return;
                 case ERROR:
                     Log.d("resetBalance","Error reseting Balance");
+                    return;
             }
         });
     }

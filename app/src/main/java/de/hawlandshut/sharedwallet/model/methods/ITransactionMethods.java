@@ -11,11 +11,7 @@ public interface ITransactionMethods {
 
     LiveData<Resource<List<TransactionDto>>> getAllTransactions(String groupId);
 
-    LiveData<Resource<TransactionDto>> getTransaction(String transactionId);
-
     LiveData<Resource<String>> addTransaction(TransactionDto transactionDto);
-
-    LiveData<Resource<String>> deleteTransaction(String transactionId);
 
     void removeListener();
 

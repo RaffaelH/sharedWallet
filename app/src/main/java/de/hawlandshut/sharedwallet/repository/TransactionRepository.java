@@ -58,11 +58,6 @@ public class TransactionRepository implements ITransactionMethods {
     }
 
     @Override
-    public LiveData<Resource<TransactionDto>> getTransaction(String transactionId) {
-        return null;
-    }
-
-    @Override
     public LiveData<Resource<String>> addTransaction(TransactionDto transactionDto) {
         MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
 
@@ -73,11 +68,6 @@ public class TransactionRepository implements ITransactionMethods {
         });
 
         return liveData;
-    }
-
-    @Override
-    public LiveData<Resource<String>> deleteTransaction(String transactionId) {
-        return null;
     }
 
     @Override

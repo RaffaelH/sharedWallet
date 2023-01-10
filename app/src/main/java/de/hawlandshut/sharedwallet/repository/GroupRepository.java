@@ -122,21 +122,11 @@ public class GroupRepository implements IGroupMethods {
             });
         }).addOnFailureListener(failure -> {
             updateGroupMutableLiveData.setValue(Resource.error(failure.getMessage(),null));
+        }).addOnCanceledListener(()->{
+            updateGroupMutableLiveData.setValue(Resource.error("Anfrage Abgebrochen",null));
         });
 
         return updateGroupMutableLiveData;
-    }
-
-    @Override
-    public LiveData<Resource<String>> deleteGroup(String groupId) {
-        MutableLiveData<Resource<String>> deleteGroupMutableLiveData = new MutableLiveData<>();
-        groupsCollection.document(groupId).delete().addOnSuccessListener(groupDeleteSuccess ->{
-            deleteGroupMutableLiveData.setValue(Resource.success("success"));
-        }).addOnFailureListener(groupDeleteFailure -> {
-            deleteGroupMutableLiveData.setValue(Resource.error(groupDeleteFailure.getMessage(),null));
-        });
-
-        return deleteGroupMutableLiveData;
     }
 
     @Override

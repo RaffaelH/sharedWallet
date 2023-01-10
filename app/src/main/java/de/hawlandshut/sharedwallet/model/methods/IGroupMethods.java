@@ -18,8 +18,6 @@ public interface IGroupMethods {
 
     LiveData<Resource<String>> updateMembers(String groupId, UserInfoDto newMember);
 
-    LiveData<Resource<String>> deleteGroup(String groupId);
-
     void removeListener();
 
 }

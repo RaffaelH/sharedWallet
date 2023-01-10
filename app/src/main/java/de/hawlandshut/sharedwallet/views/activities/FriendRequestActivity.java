@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,8 +49,10 @@ public class FriendRequestActivity extends AppCompatActivity {
             switch(updateResult.status){
                 case SUCCESS:
                     finish();
+                    return;
                 case ERROR:
-                    //TODO: Handle Error
+                    Toast.makeText(getApplicationContext(), updateResult.message, Toast.LENGTH_LONG).show();
+                    return;
             }
         });
     }

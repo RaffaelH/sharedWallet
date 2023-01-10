@@ -31,18 +31,8 @@ public class TransactionViewModel extends AndroidViewModel implements ITransacti
     }
 
     @Override
-    public LiveData<Resource<TransactionDto>> getTransaction(String transactionId) {
-        return null;
-    }
-
-    @Override
     public LiveData<Resource<String>> addTransaction(TransactionDto transactionDto) {
         return transactionRepository.addTransaction(transactionDto);
-    }
-
-    @Override
-    public LiveData<Resource<String>> deleteTransaction(String transactionId) {
-        return null;
     }
 
     @Override

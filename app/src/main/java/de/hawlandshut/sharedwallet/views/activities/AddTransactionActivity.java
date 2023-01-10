@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -56,7 +57,6 @@ public class AddTransactionActivity extends AppCompatActivity implements View.On
             List<String> debtors = mGroup.getMemberIds();
 
             debtors.remove( mAuthViewModel.getCurrentFirebaseUser().getUid());
-            Log.d("addTransaction", String.valueOf(debtors.size()));
 
             TransactionDto transaction = new TransactionDto(
                     "",
@@ -72,8 +72,10 @@ public class AddTransactionActivity extends AppCompatActivity implements View.On
                 switch(transactionTask.status){
                     case SUCCESS:
                         finish();
+                        return;
                     case ERROR:
-                        Log.d("addTransaction", " "+ transactionTask.message);
+                        Toast.makeText(getApplicationContext(), transactionTask.message, Toast.LENGTH_LONG).show();
+                        return;
                 }
             });
     }

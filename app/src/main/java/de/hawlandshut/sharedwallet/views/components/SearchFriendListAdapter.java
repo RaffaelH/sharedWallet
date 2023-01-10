@@ -56,7 +56,7 @@ public class SearchFriendListAdapter extends RecyclerView.Adapter<SearchFriendLi
     }
 
 
-    class SearchFriendHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class SearchFriendHolder extends RecyclerView.ViewHolder {
         private CardView cvCard;
         private TextView tvDisplayName;
 
@@ -67,13 +67,6 @@ public class SearchFriendListAdapter extends RecyclerView.Adapter<SearchFriendLi
 
         }
 
-        @Override
-        public void onClick(View view) {
-            switch(view.getId()){
-                case R.id.cv_search_friend_item:
-
-            }
-        }
 
     }
 

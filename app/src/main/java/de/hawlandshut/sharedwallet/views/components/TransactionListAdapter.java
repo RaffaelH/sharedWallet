@@ -56,18 +56,21 @@ public class TransactionListAdapter extends RecyclerView.Adapter<TransactionList
         String rounded = formatter.format(transactionDto.getAmount());
         holder.tvAmount.setText(rounded);
         holder.tvTitle.setText(transactionDto.getDescription());
-        if(transactionDto.getCreditorId().equals(uid)){
+        if(transactionDto.getCreditorId().equals(uid) && !transactionDto.getDebtors().contains(uid) ){
             holder.tvCreditText.setText("Du bekommst :");
             double amount = transactionDto.getAmount() - transactionDto.getAmount() / (transactionDto.getDebtors().size() +1);
             String credit = formatter.format(amount);
             holder.tvCredit.setText(credit);
             holder.tvCredit.setTextColor(((GroupEditActivity)context).getColor(R.color.green));
-        }else{
+        }if(transactionDto.getDebtors().contains(uid)){
             holder.tvCreditText.setText("Du schuldest :");
             double amount = transactionDto.getAmount() / (transactionDto.getDebtors().size() +1);
             String credit = formatter.format(amount);
             holder.tvCredit.setText(credit);
             holder.tvCredit.setTextColor(((GroupEditActivity)context).getColor(R.color.red));
+        }if(!transactionDto.getDebtors().contains(uid) && !transactionDto.getCreditorId().equals(uid) ){
+            holder.tvCreditText.setText("Ausgabe vor Gruppeneintritt.");
+             holder.tvCredit.setText("");
         }
     }
 

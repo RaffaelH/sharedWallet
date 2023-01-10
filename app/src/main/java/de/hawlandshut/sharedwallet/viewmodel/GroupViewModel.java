@@ -47,11 +47,6 @@ public class GroupViewModel extends AndroidViewModel implements IGroupMethods {
     }
 
     @Override
-    public LiveData<Resource<String>> deleteGroup(String groupId) {
-        return groupRepository.deleteGroup(groupId);
-    }
-
-    @Override
     public void removeListener(){
         groupRepository.removeListener();
     }

@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.firebase.firestore.auth.User;
 
@@ -49,8 +50,9 @@ public class AddFriendToGroupActivity extends AppCompatActivity {
             switch(result.status){
                 case SUCCESS:
                     adapter.setFriends(result.data.getFriends());
+                    break;
                 case ERROR:
-                   // Log.d("AddFriendToGroupActivity: ", result.message);
+                    break;
             }
         });
         adapter.setFriends(friends);
@@ -60,13 +62,17 @@ public class AddFriendToGroupActivity extends AppCompatActivity {
         mLoadingDialog.showDialog();
         if(mGroup.getMemberIds().contains(newMember.getUserId())){
             mLoadingDialog.closeDialog();
+            Toast.makeText(getApplicationContext(), "Dieser Freund ist bereits in der Gruppe enthalten.", Toast.LENGTH_LONG).show();
         }else{
             mGroupViewModel.updateMembers(mGroup.getGroupId(), newMember).observe(this, result -> {
                 mLoadingDialog.closeDialog();
                 switch(result.status){
                     case SUCCESS:
                         finish();
+                        return;
                     case ERROR:
+                        Toast.makeText(getApplicationContext(),"Etwas ist schief gelaufen.", Toast.LENGTH_LONG).show();
+                        return;
                 }
             });
         }

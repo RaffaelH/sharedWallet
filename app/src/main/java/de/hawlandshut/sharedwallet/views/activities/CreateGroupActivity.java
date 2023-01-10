@@ -59,7 +59,6 @@ public class CreateGroupActivity extends AppCompatActivity implements View.OnCli
             mLoadingDialog.closeDialog();
             switch(addGroup.status){
                 case SUCCESS:
-                    Toast.makeText(getApplicationContext(), "You are signed in.", Toast.LENGTH_LONG).show();
                     finish();
                     return;
                 case ERROR:
