@@ -10,6 +10,9 @@ import de.hawlandshut.sharedwallet.model.entities.FriendRequestDto;
 import de.hawlandshut.sharedwallet.model.entities.UserInfoDto;
 import de.hawlandshut.sharedwallet.model.retro.Resource;
 
+/**
+ * Interface to define the methods that are used in the InviteRepository and InviteViewModel
+ */
 public interface IInviteMethods {
 
     Uri generateContentLink();

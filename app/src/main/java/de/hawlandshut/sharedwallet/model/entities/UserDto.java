@@ -2,6 +2,10 @@ package de.hawlandshut.sharedwallet.model.entities;
 
 import java.util.List;
 
+/**
+ * UserDto is a Data Object to define the properties of a User like device-tokens, displayname and id.
+ * Every User has a list of friends which contains short information of other users.
+ */
 public class UserDto {
 
     private String userId;

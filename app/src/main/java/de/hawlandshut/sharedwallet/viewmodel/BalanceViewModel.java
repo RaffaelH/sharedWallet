@@ -11,6 +11,9 @@ import de.hawlandshut.sharedwallet.model.methods.IBalanceMethods;
 import de.hawlandshut.sharedwallet.model.retro.Resource;
 import de.hawlandshut.sharedwallet.repository.BalanceRepository;
 
+/**
+ * ViewModel for all Balance Methods. StateHolder of users Balance.
+ */
 public class BalanceViewModel extends AndroidViewModel implements IBalanceMethods {
 
     private BalanceRepository balanceRepository;

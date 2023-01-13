@@ -14,6 +14,9 @@ import de.hawlandshut.sharedwallet.model.methods.IInviteMethods;
 import de.hawlandshut.sharedwallet.model.retro.Resource;
 import de.hawlandshut.sharedwallet.repository.InviteRepository;
 
+/**
+ * ViewModel for all Invitations. State Holder to all FriendRequests of a user.
+ */
 public class InviteViewModel extends AndroidViewModel implements IInviteMethods {
 
     private InviteRepository friendsRepository;

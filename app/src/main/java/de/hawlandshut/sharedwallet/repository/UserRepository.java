@@ -25,6 +25,10 @@ import de.hawlandshut.sharedwallet.model.entities.UserInfoDto;
 import de.hawlandshut.sharedwallet.model.methods.IUserMethods;
 import de.hawlandshut.sharedwallet.model.retro.Resource;
 
+/**
+ * Repository to handle all requests regarding UserDto and UserInfoDto.
+ * Implements the IUserMethods Interface.
+ */
 public class UserRepository implements IUserMethods {
 
     private static UserRepository instance;
@@ -46,6 +50,11 @@ public class UserRepository implements IUserMethods {
         return instance;
     }
 
+    /**
+     * Updates a users device token.
+     * @param uid
+     * @param token
+     */
     @Override
     public void updateUserToken(String uid,String token) {
                 userCollection.document(uid).update("token",token).addOnSuccessListener(success ->{
@@ -55,6 +64,11 @@ public class UserRepository implements IUserMethods {
                 });
     }
 
+    /**
+     * Method to search a user by his/her display name.
+     * @param displayName
+     * @return List of UserInfoDto or error from backend
+     */
     @Override
     public LiveData<Resource<List<UserInfoDto>>> searchUser(String displayName) {
         MutableLiveData<Resource<List<UserInfoDto>>> liveData = new MutableLiveData<>();
@@ -71,6 +85,10 @@ public class UserRepository implements IUserMethods {
         return liveData;
     }
 
+    /**
+     * Method to get Information about the signed In User from user collection.
+     * @return UserDto or error from backend
+     */
     @Override
     public LiveData<Resource<UserDto>> getSignedInUser() {
         userListener = userCollection

@@ -29,7 +29,7 @@ tools:context=".views.fragments.GroupsFragment"
     android:id="@+id/btn_account_sign_out"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:text="Sign Out" />
+    android:text="Abmelden" />
 
 <Space
     android:layout_width="1dp"
@@ -42,7 +42,7 @@ tools:context=".views.fragments.GroupsFragment"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="50dp"
-    android:text="For security reasons please enter your password." />
+    android:text="Passwortbestätigung vor Löschung erforderlich." />
 
 <EditText
     android:id="@+id/et_account_password"
@@ -59,6 +59,6 @@ tools:context=".views.fragments.GroupsFragment"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:backgroundTint="#F4511E"
-    android:text="Delete Account" />
+    android:text="Account Löschen" />
 
 </LinearLayout>

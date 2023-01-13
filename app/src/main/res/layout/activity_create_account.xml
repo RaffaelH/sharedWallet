@@ -39,7 +39,7 @@ tools:context=".views.activities.CreateAccountActivity">
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:ems="10"
-    android:hint="Passwort (repeat)"
+    android:hint="Passwort (Wiederholung)"
     android:inputType="textPassword" />
 
 
@@ -49,7 +49,7 @@ tools:context=".views.activities.CreateAccountActivity">
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="10dp"
-    android:text="Create Account" />
+    android:text="Account erstellen" />
 
     <TextView
         android:id="@+id/tv_create_account_error"

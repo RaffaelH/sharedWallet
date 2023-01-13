@@ -14,6 +14,9 @@ import de.hawlandshut.sharedwallet.model.methods.IUserMethods;
 import de.hawlandshut.sharedwallet.model.retro.Resource;
 import de.hawlandshut.sharedwallet.repository.UserRepository;
 
+/**
+ * State Holder to the current users information.
+ */
 public class UserViewModel extends AndroidViewModel implements IUserMethods {
 
     private UserRepository userRepository;

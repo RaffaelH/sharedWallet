@@ -25,6 +25,10 @@ import de.hawlandshut.sharedwallet.model.entities.UserInfoDto;
 import de.hawlandshut.sharedwallet.model.methods.IInviteMethods;
 import de.hawlandshut.sharedwallet.model.retro.Resource;
 
+/**
+ * The InviteRepository handles all requests which are related to friend invitations.
+ * Implements IInviteMethods.
+ */
 public class InviteRepository implements IInviteMethods {
 
     private static InviteRepository instance;
@@ -44,6 +48,10 @@ public class InviteRepository implements IInviteMethods {
         return instance;
     }
 
+    /**
+     * Method to generate a Invitation Link to the App.
+     * @return URI
+     */
     @Override
     public Uri generateContentLink() {
         DynamicLink link = FirebaseDynamicLinks.getInstance()
@@ -56,6 +64,13 @@ public class InviteRepository implements IInviteMethods {
         return link.getUri();
     }
 
+    /**
+     * Sends a invitation to a friend.
+     * Adds a FriendRequestDto in the invites-collection.
+     * Queries the invites collection to check if a friend invitation already exists.
+     * @param friendInfo
+     * @return success message or error from backend.
+     */
     @Override
     public LiveData<Resource<String>> inviteFriend(UserInfoDto friendInfo) {
         MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
@@ -94,6 +109,11 @@ public class InviteRepository implements IInviteMethods {
         return liveData;
     }
 
+    /**
+     * Queries all open invitations of a user.
+     * Uses the userId of the signed in user.
+     * @return List of FriendRequestDto or error from backend
+     */
     @Override
     public LiveData<Resource<List<FriendRequestDto>>> getALlFriendRequests() {
         MutableLiveData<Resource<List<FriendRequestDto>>> liveData = new MutableLiveData<>();
@@ -113,6 +133,12 @@ public class InviteRepository implements IInviteMethods {
         return liveData;
     }
 
+    /**
+     * Process the answer to a invitation.
+     * Updates the invites collection.
+     * @param friendRequestDto
+     * @return success message or error from backend
+     */
     @Override
     public LiveData<Resource<String>> updateFriendRequest(FriendRequestDto friendRequestDto) {
         MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();

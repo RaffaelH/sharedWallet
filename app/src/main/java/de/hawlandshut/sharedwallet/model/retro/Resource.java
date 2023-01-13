@@ -3,6 +3,9 @@ package de.hawlandshut.sharedwallet.model.retro;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+/**
+ * This Class is used to retrofit Data from Backend Requests.
+ */
 public class Resource<T> {
 
     @NonNull

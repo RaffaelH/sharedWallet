@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import de.hawlandshut.sharedwallet.R;
+import de.hawlandshut.sharedwallet.utils.Validators;
 import de.hawlandshut.sharedwallet.viewmodel.AuthViewModel;
 import de.hawlandshut.sharedwallet.views.components.LoadingDialog;
 
@@ -95,8 +96,29 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void forgotPassword() {
-
-       //TODO Implement Forgot Password Logic
+        String email = mEditTextEmail.getText().toString();
+        if(Validators.isNullOrEmpty(email)){
+            mEditTextEmail.setHighlightColor(getColor(R.color.red));
+            Toast.makeText(getApplicationContext(), "Bitte Email eingeben!", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if(!Validators.isValidEmail(email)){
+            mEditTextEmail.setHighlightColor(getColor(R.color.red));
+            Toast.makeText(getApplicationContext(), "Inkorrekte Email-Struktur.", Toast.LENGTH_LONG).show();
+            return;
+        }
+        else{
+            mAuthViewModel.forgotPasswordEmail(mEditTextEmail.getText().toString()).observe(this,result ->{
+                switch(result.status){
+                    case SUCCESS:
+                        Toast.makeText(getApplicationContext(), "Email gesendet.", Toast.LENGTH_LONG).show();
+                        break;
+                    case ERROR:
+                        Toast.makeText(getApplicationContext(), result.message, Toast.LENGTH_LONG).show();
+                        break;
+                }
+            });
+        }
     }
 
     private void gotoCreateAccount() {

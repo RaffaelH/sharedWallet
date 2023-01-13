@@ -1,8 +1,11 @@
 package de.hawlandshut.sharedwallet.model.entities;
 
-import java.util.HashMap;
 import java.util.List;
 
+/**
+ * TransactionDto is a Data Object are used to define the amount, debtors and the creditor for a transaction.
+ * Every transaction needs a reference to a group.
+ */
 public class TransactionDto {
 
     private String transactionId;

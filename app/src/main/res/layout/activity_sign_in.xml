@@ -35,7 +35,7 @@
         android:layout_width="match_parent"
         android:layout_marginTop="10dp"
         android:layout_height="wrap_content"
-        android:text="Sign in" />
+        android:text="Anmelden" />
 
 
 
@@ -44,7 +44,7 @@
         android:layout_width="match_parent"
         android:layout_marginTop="10dp"
         android:layout_height="wrap_content"
-        android:text="Forgot Password" />
+        android:text="Password Zurücksetzen" />
 
     <TextView
         android:id="@+id/tv_sign_in_error"
@@ -63,7 +63,7 @@
         android:layout_marginTop="10dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="30dp"
-        android:text="Create Account" />
+        android:text="Account erstellen" />
 
 
 </androidx.appcompat.widget.LinearLayoutCompat>

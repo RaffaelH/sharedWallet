@@ -3,6 +3,9 @@ package de.hawlandshut.sharedwallet.model.entities;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+/**
+ * FriendRequestDto is a Data Object to define an Invitation from One User to another.
+ */
 public class FriendRequestDto implements Parcelable {
 
     private String requestId;

@@ -15,6 +15,10 @@ import de.hawlandshut.sharedwallet.model.entities.BalanceDto;
 import de.hawlandshut.sharedwallet.model.methods.IBalanceMethods;
 import de.hawlandshut.sharedwallet.model.retro.Resource;
 
+/**
+ * The BalanceRepository handles all requests to a users Balance Collection.
+ * Implements IBalanceMethods.
+ */
 public class BalanceRepository implements IBalanceMethods {
 
     private static BalanceRepository instance;
@@ -33,6 +37,12 @@ public class BalanceRepository implements IBalanceMethods {
         return instance;
     }
 
+    /**
+     * Queries the balance collection to get the users balance for a given group.
+     * Uses a snapshot listener to listen to live data updates.
+     * @param groupId
+     * @return the BalanceDto from a user for a given group or error from backend.
+     */
     @Override
     public LiveData<Resource<BalanceDto>> getBalance(String groupId) {
         balanceListener = balanceCollection.whereEqualTo(GROUP_ID_FIELD,groupId)
@@ -48,6 +58,11 @@ public class BalanceRepository implements IBalanceMethods {
         return balanceLiveData;
     }
 
+    /**
+     * Updates the users balance for a given group to the default value.
+     * @param groupId
+     * @return success message or error from backend
+     */
     @Override
     public LiveData<Resource<String>> resetBalance(String groupId) {
         MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
@@ -65,6 +80,9 @@ public class BalanceRepository implements IBalanceMethods {
         return liveData;
     }
 
+    /**
+     * removes all snapshot listener and sets data to default.
+     */
     @Override
     public void removeListener() {
         if(balanceListener!=null){

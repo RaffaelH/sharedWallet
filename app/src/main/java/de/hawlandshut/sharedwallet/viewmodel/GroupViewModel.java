@@ -15,6 +15,9 @@ import de.hawlandshut.sharedwallet.model.retro.Resource;
 import de.hawlandshut.sharedwallet.model.methods.IGroupMethods;
 import de.hawlandshut.sharedwallet.repository.GroupRepository;
 
+/**
+ * ViewModel for all Group Methods. State Holder of all Groups.
+ */
 public class GroupViewModel extends AndroidViewModel implements IGroupMethods {
 
     private GroupRepository groupRepository;

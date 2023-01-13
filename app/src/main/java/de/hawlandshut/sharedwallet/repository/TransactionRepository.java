@@ -1,7 +1,5 @@
 package de.hawlandshut.sharedwallet.repository;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -12,20 +10,22 @@ import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import de.hawlandshut.sharedwallet.model.retro.Resource;
 import de.hawlandshut.sharedwallet.model.entities.TransactionDto;
 import de.hawlandshut.sharedwallet.model.methods.ITransactionMethods;
 
+/**
+ * The TransactionRepository handles all transactions a user is doing in a group.
+ * Implements ITransactionMethods.
+ */
 public class TransactionRepository implements ITransactionMethods {
 
     private static TransactionRepository instance;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final String TRANSACTION_COLLECTION_NAME = "transactions";
     private final String GROUP_ID_FIELD ="groupId";
-    private final String TRANSACTION_FIELD ="transactionId";
     private final String CREATED_FIELD ="created";
     private CollectionReference transactionCollection = db.collection(TRANSACTION_COLLECTION_NAME);
     private MutableLiveData<Resource<List <TransactionDto>>> getAllTransactions = new MutableLiveData<>();
@@ -38,6 +38,12 @@ public class TransactionRepository implements ITransactionMethods {
         return instance;
     }
 
+    /**
+     * Queries all transactions which are related to a group.
+     * Uses a snapshot listener to get live data updates.
+     * @param groupId
+     * @return a list of TransactionDto or error from backend
+     */
     @Override
     public LiveData<Resource<List<TransactionDto>>> getAllTransactions(String groupId) {
         allTransactionsListener = transactionCollection.whereEqualTo(GROUP_ID_FIELD, groupId)
@@ -57,6 +63,11 @@ public class TransactionRepository implements ITransactionMethods {
         return getAllTransactions;
     }
 
+    /**
+     * Adds a new transaction to the transactions collection.
+     * @param transactionDto
+     * @return success message or error from backend
+     */
     @Override
     public LiveData<Resource<String>> addTransaction(TransactionDto transactionDto) {
         MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
@@ -70,6 +81,9 @@ public class TransactionRepository implements ITransactionMethods {
         return liveData;
     }
 
+    /**
+     * Removes all open snapshot listeners.
+     */
     @Override
     public void removeListener() {
         allTransactionsListener.remove();

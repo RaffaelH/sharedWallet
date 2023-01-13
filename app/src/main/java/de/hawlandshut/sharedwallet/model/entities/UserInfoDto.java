@@ -3,6 +3,9 @@ package de.hawlandshut.sharedwallet.model.entities;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+/**
+ * UserInfoDto is a Data Object to define short Information about a User.
+ */
 public class UserInfoDto implements Parcelable {
 
     private String displayName;

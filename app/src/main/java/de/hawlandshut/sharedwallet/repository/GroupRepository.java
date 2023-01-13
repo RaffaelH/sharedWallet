@@ -24,20 +24,21 @@ import de.hawlandshut.sharedwallet.model.entities.UserInfoDto;
 import de.hawlandshut.sharedwallet.model.retro.Resource;
 import de.hawlandshut.sharedwallet.model.methods.IGroupMethods;
 
+/**
+ * The GroupRepository handles all requests to the group collection.
+ * Implements IGroupMethods.
+ */
 public class GroupRepository implements IGroupMethods {
-    private final String TAG ="GroupRepository";
 
     private static GroupRepository instance;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final String GROUP_COLLECTION_NAME = "groups";
     private final String MEMBERS_FIELD ="memberIds";
     private final String GROUP_ID_FIELD ="groupId";
-
     private final String CREATED_FIELD ="created";
     private CollectionReference groupsCollection = db.collection(GROUP_COLLECTION_NAME);
     private MutableLiveData<Resource<List<GroupDto>>> getAllGroupsMutableLiveData = new MutableLiveData<>();
     private ListenerRegistration allGroupsListener;
-
 
     public static GroupRepository getInstance() {
         if(instance == null) {
@@ -46,6 +47,11 @@ public class GroupRepository implements IGroupMethods {
         return instance;
     }
 
+    /**
+     * Queries all groups where the current user is member of.
+     * Uses a snapshot listener to listen to live data updates.
+     * @return List of GroupDto or error from backend.
+     */
     @Override
     public LiveData<Resource<List<GroupDto>>> getAllGroups() {
         if(FirebaseAuth.getInstance().getCurrentUser() != null){
@@ -65,10 +71,14 @@ public class GroupRepository implements IGroupMethods {
                 }
             });
         }
-
         return getAllGroupsMutableLiveData;
     }
 
+    /**
+     * Queries a group by a given Id.
+     * @param groupId
+     * @return GroupDto or error from backend.
+     */
     @Override
     public LiveData<Resource<GroupDto>> getGroupById(String groupId) {
         MutableLiveData<Resource<GroupDto>> getGroupByIdMutableLiveData = new MutableLiveData<>();
@@ -97,6 +107,11 @@ public class GroupRepository implements IGroupMethods {
         return getGroupByIdMutableLiveData;
     }
 
+    /**
+     * Adds a group to the group-collection.
+     * @param group
+     * @return success-message or error from backend.
+     */
     @Override
     public LiveData<Resource<String>> addGroup(GroupDto group) {
         MutableLiveData<Resource<String>> addGroupMutableLiveData = new MutableLiveData<>();
@@ -109,6 +124,12 @@ public class GroupRepository implements IGroupMethods {
         return addGroupMutableLiveData;
     }
 
+    /**
+     * Adds a new Member to a groups member List.
+     * @param groupId
+     * @param newMember
+     * @return success message or error from backend.
+     */
     @Override
     public LiveData<Resource<String>> updateMembers(String groupId,UserInfoDto newMember) {
         MutableLiveData<Resource<String>> updateGroupMutableLiveData = new MutableLiveData<>();
@@ -129,6 +150,9 @@ public class GroupRepository implements IGroupMethods {
         return updateGroupMutableLiveData;
     }
 
+    /**
+     * removes all snapshot listener
+     */
     @Override
     public void removeListener(){
         if(allGroupsListener != null){

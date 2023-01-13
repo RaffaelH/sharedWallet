@@ -17,10 +17,8 @@ import de.hawlandshut.sharedwallet.views.activities.MainActivity;
 * In order to make this Java sample functional, you must remove the following from the Kotlin messaging
 * service in the AndroidManifest.xml:
 *
-* <intent-filter>
-*   <action android:name="com.google.firebase.MESSAGING_EVENT" />
-* </intent-filter>
 */
+
 public class PushNotificationService extends FirebaseMessagingService {
 
 private static final String TAG = "MyFirebaseMsgService";

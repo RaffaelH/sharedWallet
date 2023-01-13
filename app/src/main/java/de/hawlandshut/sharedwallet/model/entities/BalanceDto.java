@@ -1,5 +1,10 @@
 package de.hawlandshut.sharedwallet.model.entities;
 
+/**
+ * BalanceDto is a Data Object to define the Balance of a Group Member.
+ * Every BalanceDto has Groups and Users Reference
+ *
+ */
 public class BalanceDto {
 
     private String groupId;

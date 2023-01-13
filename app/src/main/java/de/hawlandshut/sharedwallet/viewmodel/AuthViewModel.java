@@ -11,6 +11,9 @@ import de.hawlandshut.sharedwallet.model.retro.Resource;
 import de.hawlandshut.sharedwallet.model.methods.IAuthMethods;
 import de.hawlandshut.sharedwallet.repository.AuthRepository;
 
+/**
+ * View Model for all authentication methods.
+ */
 public class AuthViewModel extends AndroidViewModel implements IAuthMethods {
     private AuthRepository authRepository;
 
@@ -32,6 +35,16 @@ public class AuthViewModel extends AndroidViewModel implements IAuthMethods {
     @Override
     public LiveData<Resource<String>> createAccount(String email, String password, String displayName) {
         return authRepository.createAccount(email, password, displayName);
+    }
+
+    @Override
+    public LiveData<Resource<String>> forgotPasswordEmail(String email) {
+        return authRepository.forgotPasswordEmail(email);
+    }
+
+    @Override
+    public LiveData<Resource<String>> deleteAccount(String password) {
+        return authRepository.deleteAccount(password);
     }
 
     @Override

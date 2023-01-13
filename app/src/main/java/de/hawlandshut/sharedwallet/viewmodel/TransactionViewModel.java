@@ -14,6 +14,9 @@ import de.hawlandshut.sharedwallet.model.entities.TransactionDto;
 import de.hawlandshut.sharedwallet.model.methods.ITransactionMethods;
 import de.hawlandshut.sharedwallet.repository.TransactionRepository;
 
+/**
+ * State Holder to all transaction of a given Group.
+ */
 public class TransactionViewModel extends AndroidViewModel implements ITransactionMethods {
 
     private TransactionRepository transactionRepository;

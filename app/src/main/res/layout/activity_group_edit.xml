@@ -106,7 +106,10 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_transaction_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:paddingBottom="100dp"
+            android:clipToPadding="false"
+            />
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/flt_btn_new_transaction"

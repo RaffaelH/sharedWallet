@@ -3,11 +3,12 @@ package de.hawlandshut.sharedwallet.model.entities;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.firebase.firestore.auth.User;
-
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * GroupDto is a Data Object to define a Group where Users can share their transactions.
+ */
 public class GroupDto implements Parcelable {
     private String groupId;
     private String title;
